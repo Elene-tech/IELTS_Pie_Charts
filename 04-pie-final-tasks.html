@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажер 4 · Фінальні завдання — Pie Charts</title>
+<style>
+:root{
+  --bg:#F7F5EC; --card:#FFFFFF; --ink:#22271E; --muted:#6E7468; --line:#E4E1D2;
+  --green:#1E5631; --green-soft:#E9F2E4;
+  --lime:#84CC16; --lime-soft:#F2F9E0;
+  --yellow:#FDE047;
+  --orange:#E8890C; --orange-soft:#FCF1DE;
+  --red:#B3402E; --red-soft:#F8E9E5;
+  --purple:#7A5AA0; --purple-soft:#F1ECF7;
+  --blue:#2E5A88;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:16.5px; line-height:1.6; padding:24px 16px 60px;}
+.wrap{max-width:980px; margin:0 auto;}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif; color:var(--green); line-height:1.25;}
+h1{font-size:30px; margin-bottom:6px;}
+h2{font-size:22px; margin:40px 0 14px;}
+h3{font-size:18px; margin:18px 0 10px;}
+.sub{color:var(--muted); font-size:14.5px; margin-bottom:20px;}
+mark{background:var(--yellow); padding:0 3px; border-radius:2px;}
+.bc{font-size:13px; color:var(--muted); margin-bottom:14px;}
+.bc b{color:var(--green);}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:20px; box-shadow:0 1px 3px rgba(30,60,30,.05);}
+.task-img{width:100%; max-width:680px; border:1px solid var(--line); border-radius:10px; margin:12px 0; overflow:hidden;}
+.step-tag{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--orange); background:var(--orange-soft); border:1px solid var(--orange); border-radius:20px; padding:3px 12px; margin-bottom:10px;}
+.instr{background:var(--green-soft); border:1.5px solid var(--green); border-radius:12px; padding:14px 16px; margin:12px 0; font-size:15.5px;}
+.instr .lbl{display:block; font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--green); margin-bottom:6px;}
+.enhint{background:#EDF3F9; border:1.5px solid var(--blue); border-radius:12px; padding:12px 15px; margin:12px 0; font-size:14.5px;}
+.enhint .lbl{display:block; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); margin-bottom:5px;}
+.btn{display:inline-block; border:none; border-radius:10px; padding:11px 18px; font-size:14.5px; font-weight:600; cursor:pointer; margin:6px 6px 0 0; font-family:inherit;}
+.btn-primary{background:var(--green); color:#fff;}
+.btn-ghost{background:transparent; border:1.5px solid var(--green); color:var(--green);}
+.btn-solution{background:transparent; border:1.5px solid var(--orange); color:var(--orange);}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+.btn:hover:not(:disabled){opacity:.85;}
+textarea{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:13px 15px; font-size:16px; font-family:inherit; background:var(--card); color:var(--ink); resize:vertical;}
+textarea:focus{outline:none; border-color:var(--green);}
+textarea.locked{background:#F4F2E8; border-style:dashed;}
+.attempt{background:var(--purple-soft); border:1.5px solid var(--purple); border-radius:10px; padding:12px 15px; font-size:14.5px; margin-top:12px;}
+.attempt .lbl{display:block; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--purple); margin-bottom:5px;}
+.timer-row{display:flex; align-items:center; gap:16px; margin:10px 0 14px; flex-wrap:wrap;}
+#timer3{font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--green);}
+.wc{font-size:13px; color:var(--muted); margin-top:6px;}
+.chk{display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border:1.5px solid var(--line); border-radius:10px; margin-bottom:7px; cursor:pointer; font-size:14.5px; background:var(--card);}
+.chk input{margin-top:3px; accent-color:var(--green); flex-shrink:0; width:17px; height:17px;}
+.model{display:none; margin-top:16px; border-left:3px solid var(--green); background:var(--green-soft); padding:14px 16px; border-radius:0 10px 10px 0; font-size:14.5px;}
+.model p{margin-bottom:10px;}
+.fb{margin-top:10px; font-size:15px; font-weight:600;}
+.divider{border:none; border-top:2px dashed var(--line); margin:40px 0;}
+.small{font-size:13.5px; color:var(--muted);}
+@media (max-width:640px){
+  body{padding:16px 10px 44px; font-size:15.5px;}
+  h1{font-size:24px;} h2{font-size:19px;}
+  .card{padding:14px;}
+  .btn{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="bc">Модуль 2 · Pie Charts → <b>Тренажер 4 з 4</b></div>
+<h1>Фінальні завдання</h1>
+<p class="sub">Три нових діаграми, три рівні самостійності. Модель відкривається <mark>лише після твоєї здачі</mark> — спочатку пишеш, потім звіряєш.</p>
+
+<div class="instr">
+  <span class="lbl">Як це працює</span>
+  <b>Спроба 1 (з підказками)</b> — відповідь по частинах: introduction → overview → body, кожна з англійською підказкою. Без таймера.<br>
+  <b>Спроба 2 (лише групування)</b> — пишеш усе одразу, є одна підказка щодо групування. Без таймера.<br>
+  <b>Спроба 3 (чистий іспит)</b> — таймер 20:00, жодних підказок, чек-лист перед моделлю.<br>
+  Йди по порядку — кожна спроба готує до наступної.
+</div>
+
+<!-- ==================== СПРОБА 1 ==================== -->
+<h2>Спроба 1 · Preferred communication methods, two age groups</h2>
+<div class="card">
+  <p style="font-size:14.5px;"><i>The two pie charts below show the preferred methods of communication for two age groups: 18–30 year olds and 50–65 year olds. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.</i></p>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Preferred methods of communication</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">18–30 year olds</text><path d="M165.0,195 L165.0,100.0 A95,95 0 0 1 176.9,289.3 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="221.9" y="195.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">48%</text><path d="M165.0,195 L176.9,289.3 A95,95 0 0 1 74.6,224.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="134.5" y="247.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">22%</text><path d="M165.0,195 L74.6,224.4 A95,95 0 0 1 79.0,154.6 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="108.1" y="195.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M165.0,195 L79.0,154.6 A95,95 0 0 1 119.2,111.8 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="123.4" y="160.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><path d="M165.0,195 L119.2,111.8 A95,95 0 0 1 165.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><text x="150.8" y="143.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">8%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">50–65 year olds</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 508.2,134.4 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="459.3" y="147.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">14%</text><path d="M435.0,195 L508.2,134.4 A95,95 0 0 1 515.2,245.9 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="491.9" y="195.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">20%</text><path d="M435.0,195 L515.2,245.9 A95,95 0 0 1 354.8,245.9 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="435.0" y="256.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">32%</text><path d="M435.0,195 L354.8,245.9 A95,95 0 0 1 400.0,106.7 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="380.8" y="181.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">28%</text><path d="M435.0,195 L400.0,106.7 A95,95 0 0 1 435.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="416.4,97.8 413.5,82.0" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="413.5" y="86.0" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">6%</text><rect x="-23.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-4.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Social media</text><rect x="119.19999999999999" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="138.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Text messaging</text><rect x="276.59999999999997" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="295.59999999999997" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Phone calls</text><rect x="411.19999999999993" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="430.19999999999993" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Email</text><rect x="500.19999999999993" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="519.1999999999999" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other</text></svg></div>
+
+  <div class="instr"><span class="lbl">Інструкція</span>Три кроки: introduction → overview → body. На кожному спочатку читай англійську підказку, потім пиши. Після трьох частин відкриється повна модель.</div>
+
+  <h3>Крок 1 · Introduction</h3>
+  <div class="enhint"><span class="lbl">Hint</span>Paraphrase: «show» → «compare/illustrate»; name what is measured (preferred communication methods, in percentages), the two age groups. No dates on these charts → present simple, no trend verbs anywhere.</div>
+  <textarea id="g1i" rows="2" placeholder="The two pie charts compare..."></textarea>
+  <button class="btn btn-solution" id="g1ib" disabled>Показати взірець</button>
+  <div id="g1ia"></div>
+  <div class="model" id="g1im"><p><b>Sample:</b> The two pie charts compare the preferred methods of communication for two age groups — 18–30 year olds and 50–65 year olds.</p></div>
+
+  <h3>Крок 2 · Overview</h3>
+  <div class="enhint"><span class="lbl">Hint</span>Two stories, no numbers: (1) social media dominate among the young, whereas phone calls and email lead among the older group; (2) text messaging is the only method with similar shares in both groups.</div>
+  <textarea id="g1o" rows="3" placeholder="Overall, ..."></textarea>
+  <button class="btn btn-solution" id="g1ob" disabled>Показати взірець</button>
+  <div id="g1oa"></div>
+  <div class="model" id="g1om"><p><b>Sample:</b> Overall, social media account for nearly half of preferences among 18–30 year olds, whereas the older group favours phone calls and email. Text messaging is the only method used to a broadly similar extent by both age groups.</p></div>
+
+  <h3>Крок 3 · Body 1 + Body 2</h3>
+  <div class="enhint"><span class="lbl">Hint · grouping</span>Body 1 = the young group: social media first (nearly half!), then the rest. Body 2 = the older group — open with «In contrast, …». Use fractions (nearly half, well over half for phone + email together) and one multiplier (48% vs 14% — more than three times as high).</div>
+  <textarea id="g1b" rows="6" placeholder="Among 18–30 year olds, social media..."></textarea>
+  <div class="wc" id="g1wc">0 слів</div>
+  <button class="btn btn-solution" id="g1bb" disabled>Показати взірець</button>
+  <div id="g1ba"></div>
+  <div class="model" id="g1bm">
+    <p><b>Sample Body 1:</b> Among 18–30 year olds, social media account for nearly half of all preferences, at 48%, while text messaging makes up just over a fifth at 22%. Phone calls and email represent only 12% and 10% respectively, and other methods a marginal 8%.</p>
+    <p><b>Sample Body 2:</b> In contrast, the 50–65 group favours traditional channels: phone calls represent 32% and email 28% — together well over half of all preferences. Social media, however, amount to just 14%, less than a third of the younger group's figure, and other methods a mere 6%.</p>
+  </div>
+
+  <div id="full1-wrap" style="display:none; margin-top:18px;">
+    <button class="btn btn-primary" onclick="showFull1()">Показати повну модельну відповідь</button>
+    <div class="model" id="full1">
+      <p><b>§1</b> The two pie charts compare the preferred methods of communication for two age groups — 18–30 year olds and 50–65 year olds.</p>
+      <p><b>§2</b> Overall, social media account for nearly half of preferences among 18–30 year olds, whereas the older group favours phone calls and email. Text messaging is the only method used to a broadly similar extent by both age groups.</p>
+      <p><b>§3</b> Among 18–30 year olds, social media account for nearly half of all preferences, at 48%, while text messaging makes up just over a fifth at 22%. Phone calls and email represent only 12% and 10% respectively, and other methods a marginal 8%.</p>
+      <p><b>§4</b> In contrast, the 50–65 group favours traditional channels: phone calls represent 32% and email 28% — together well over half of all preferences. Social media, however, amount to just 14%, less than a third of the younger group's figure, and other methods a mere 6%.</p>
+      <p class="small">Порівняй рішення: де твій «In contrast»? Чи є дроби (nearly half, just over a fifth, well over half)? Чи present simple усюди — дат немає?</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== СПРОБА 2 ==================== -->
+<h2>Спроба 2 · Tourist accommodation, 2010 vs 2024</h2>
+<div class="card">
+  <p style="font-size:14.5px;"><i>The two pie charts below show where tourists in one region stayed in 2010 and 2024. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.</i></p>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Where tourists stayed</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">2010</text><path d="M165.0,195 L165.0,100.0 A95,95 0 0 1 176.9,289.3 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="221.9" y="195.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">48%</text><path d="M165.0,195 L176.9,289.3 A95,95 0 0 1 95.7,260.0 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="145.7" y="252.6" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M165.0,195 L95.7,260.0 A95,95 0 0 1 76.7,160.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="109.0" y="209.7" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">18%</text><path d="M165.0,195 L76.7,160.0 A95,95 0 0 1 124.6,109.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="123.4" y="160.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M165.0,195 L124.6,109.0 A95,95 0 0 1 165.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="143.4,98.4 139.9,82.8" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="139.9" y="86.8" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">7%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">2024</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 511.9,250.8 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="485.8" y="173.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">35%</text><path d="M435.0,195 L511.9,250.8 A95,95 0 0 1 340.7,206.9 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="420.8" y="254.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">38%</text><path d="M435.0,195 L340.7,206.9 A95,95 0 0 1 358.1,139.2 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="379.8" y="184.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M435.0,195 L358.1,139.2 A95,95 0 0 1 400.0,106.7 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="400.1" y="154.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">9%</text><path d="M435.0,195 L400.0,106.7 A95,95 0 0 1 435.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="416.4,97.8 413.5,82.0" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="413.5" y="86.0" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">6%</text><rect x="-43.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-24.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Hotels</text><rect x="53.599999999999994" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="72.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Private rentals</text><rect x="218.6" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="237.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Friends &amp; relatives</text><rect x="414.0" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="433.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Camping</text><rect x="518.2" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="537.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other</text></svg></div>
+
+  <div class="enhint"><span class="lbl">Єдина підказка · grouping</span>Body 1 = the big swap: hotels (falling) vs private rentals (surging past them). Body 2 = the three smaller options, all declining (staying with friends, camping, other). Overview: rentals overtook hotels; everything else shrank. Remember: years → past simple + change language.</div>
+
+  <div class="instr"><span class="lbl">Інструкція</span>Пиши всю відповідь одразу (§1–§4, 150+ слів). Без таймера. Після чек-листа відкриється модель.</div>
+  <textarea id="essay2" rows="9" placeholder="The two pie charts compare..."></textarea>
+  <div class="wc" id="wc2">0 слів (мінімум 150)</div>
+
+  <h3 style="margin-top:16px;">Чек-лист перед моделлю</h3>
+  <div id="chk2"></div>
+  <button class="btn btn-ghost" id="unlock2">Здати роботу · перевірити чек-лист</button>
+  <div class="fb" id="fb2"></div>
+
+  <div class="model" id="model2">
+    <p><b>§1</b> The two pie charts compare where tourists in one region chose to stay in 2010 and 2024.</p>
+    <p><b>§2</b> Overall, private rentals overtook hotels to become the most popular accommodation by 2024, while every other option became less common.</p>
+    <p><b>§3</b> Hotels accounted for just under half of all stays in 2010, at 48%, but this share fell markedly to 35% by 2024. Private rentals, by contrast, surged from 15% to 38% over the same period — the most dramatic change on the charts.</p>
+    <p><b>§4</b> The remaining options all declined modestly: staying with friends or relatives dropped from 18% to 12%, camping from 12% to 9%, and other accommodation from 7% to a mere 6%.</p>
+    <p class="small">Порівняй: чи названо перегін (overtook) у overview? Чи «by contrast» відкриває другий абзац? Чи є дріб (just under half, a mere 6%)?</p>
+  </div>
+  <div id="rw2" style="display:none; margin-top:16px;">
+    <h3>Перепиши слабкий абзац</h3>
+    <p class="small" style="margin-bottom:8px;">Твоя здача залишається вище. Перепиши лише те, де чек-лист дав «ні».</p>
+    <textarea id="rewrite2" rows="4" placeholder="Виправлений абзац..."></textarea>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== СПРОБА 3 ==================== -->
+<h2>Спроба 3 · Land use, three regions · exam conditions</h2>
+<div class="card">
+  <p style="font-size:14.5px;"><i>The three pie charts below show how land is used in three different regions. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.</i></p>
+  <div class="task-img"><svg viewBox="0 0 870 400" width="100%" style="display:block;background:#fff;"><text x="435.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Land use in three regions</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Region 1</text><path d="M165.0,195 L165.0,100.0 A95,95 0 1 1 135.6,285.4 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="221.3" y="207.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">55%</text><path d="M165.0,195 L135.6,285.4 A95,95 0 0 1 74.6,165.6 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="114.2" y="224.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">25%</text><path d="M165.0,195 L74.6,165.6 A95,95 0 0 1 119.2,111.8 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="121.1" y="162.7" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M165.0,195 L119.2,111.8 A95,95 0 0 1 165.0,100.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="150.8" y="143.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">8%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Region 2</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 525.4,224.4 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="481.1" y="165.5" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M435.0,195 L525.4,224.4 A95,95 0 0 1 341.7,177.2 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="420.8" y="254.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">48%</text><path d="M435.0,195 L341.7,177.2 A95,95 0 0 1 394.6,109.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="390.0" y="164.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M435.0,195 L394.6,109.0 A95,95 0 0 1 435.0,100.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><polyline points="413.4,98.4 409.9,82.8" fill="none" stroke="#C94F7C" stroke-width="1.2"/><text x="409.9" y="86.8" font-size="12" font-weight="700" text-anchor="end" fill="#C94F7C" font-family="Segoe UI,sans-serif">7%</text><text x="705.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Region 3</text><path d="M705.0,195 L705.0,100.0 A95,95 0 0 1 795.4,165.6 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="738.5" y="152.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">20%</text><path d="M705.0,195 L795.4,165.6 A95,95 0 0 1 770.0,264.3 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="760.2" y="213.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">18%</text><path d="M705.0,195 L770.0,264.3 A95,95 0 1 1 649.2,118.1 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="661.1" y="235.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">52%</text><path d="M705.0,195 L649.2,118.1 A95,95 0 0 1 705.0,100.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="687.4" y="144.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><rect x="219.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="238.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Agriculture</text><rect x="353.6" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="372.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Forest</text><rect x="450.20000000000005" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="469.20000000000005" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Urban</text><rect x="539.2" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="558.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other</text></svg></div>
+
+  <div class="instr"><span class="lbl">Інструкція · режим іспиту</span>3 хв — аналіз (чотири питання з відео), 15 хв — письмо, 2 хв — перевірка часів і прийменників. Жодних підказок. Після чек-листа — модель і перепис слабкого місця. Обережно: дат немає → present simple, нуль дієслів руху.</div>
+
+  <div class="timer-row">
+    <button class="btn btn-primary" id="start3">Старт · 20:00</button>
+    <span id="timer3">20:00</span>
+  </div>
+
+  <textarea id="essay3" rows="9" placeholder="The three pie charts compare..."></textarea>
+  <div class="wc" id="wc3">0 слів (мінімум 150)</div>
+
+  <h3 style="margin-top:16px;">Чек-лист перед моделлю (усі 8 — чесно)</h3>
+  <div id="chk3"></div>
+  <button class="btn btn-ghost" id="unlock3">Здати роботу · перевірити чек-лист</button>
+  <div class="fb" id="fb3"></div>
+
+  <div class="model" id="model3">
+    <p><b>§1</b> The three pie charts compare how land is used in three different regions, divided into four categories: agriculture, forest, urban and other.</p>
+    <p><b>§2</b> Overall, each region is dominated by a different type of land use: agriculture in Region 1, forest in Region 2 and urban land in Region 3. No single category leads across all three regions.</p>
+    <p><b>§3</b> In Region 1, agriculture accounts for 55% of land — by far the largest share — followed by forest at 25%. Urban land makes up only 12%, and other uses just 8%.</p>
+    <p><b>§4</b> Region 2, in contrast, is heavily forested, with trees covering nearly half of its land, at 48%, while agriculture represents 30%. Region 3 is the most urbanised: built-up areas constitute 52%, well over half of its land, with agriculture and forest at 20% and 18% respectively.</p>
+    <p class="small">Порівняй рішення: overview без цифр, із трьома «лідерами»? Чи present simple усюди? Чи «by far the largest share» та «well over half» замість сухих чисел?</p>
+  </div>
+  <div id="rw3" style="display:none; margin-top:16px;">
+    <h3>Перепиши слабкий абзац</h3>
+    <p class="small" style="margin-bottom:8px;">Твоя іспитова спроба лишається вище.</p>
+    <textarea id="rewrite3" rows="4" placeholder="Виправлений абзац..."></textarea>
+  </div>
+</div>
+
+<div class="card" style="background:var(--lime-soft); border-color:var(--lime);">
+  <h3 style="margin-top:0;">Модуль 2 завершено 🎯</h3>
+  <p style="font-size:14.5px;">Три здачі — три рівні впевненості. Якщо в спробі 3 чек-лист дав 7–8 чесних «так» — pie charts твої. Далі: bar charts, де обидва «словникові двигуни» працюють разом.</p>
+</div>
+
+</div>
+
+<script>
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const done1 = { intro:false, overview:false, body:false };
+function guidedGate(btnId, taId, modelId, attId, key, wcId){
+  const btn=document.getElementById(btnId), ta=document.getElementById(taId), m=document.getElementById(modelId);
+  ta.addEventListener('input', function(){
+    btn.disabled = ta.value.trim().length < 25;
+    if(wcId){ const n=ta.value.trim().split(/\s+/).filter(Boolean).length; document.getElementById(wcId).textContent = n+' слів'; }
+  });
+  btn.addEventListener('click', function(){
+    if(btn.disabled) return;
+    ta.readOnly=true; ta.classList.add('locked'); btn.disabled=true;
+    document.getElementById(attId).innerHTML='<div class="attempt"><span class="lbl">Твоя зафіксована спроба</span>'+esc(ta.value)+'</div>';
+    m.style.display='block';
+    done1[key]=true;
+    if(done1.intro && done1.overview && done1.body){ document.getElementById('full1-wrap').style.display='block'; }
+  });
+}
+guidedGate('g1ib','g1i','g1im','g1ia','intro');
+guidedGate('g1ob','g1o','g1om','g1oa','overview');
+guidedGate('g1bb','g1b','g1bm','g1ba','body','g1wc');
+function showFull1(){ document.getElementById('full1').style.display='block'; }
+
+const CHECKS2 = [
+  'Overview є і без жодної цифри',
+  'Overview називає перегін: rentals випередили hotels',
+  'Рівно 4 абзаци, кожен зі своєю роботою',
+  '§3 = hotels vs rentals (або за роками), §4 = три дрібні опції',
+  'Past simple всюди (є роки!) і жодного «went up» без потреби',
+  'Є хоча б один дріб (just under half, a mere 6%)'
+];
+const CHECKS3 = [
+  'Overview є і без жодної цифри',
+  'Overview називає трьох «лідерів» (agriculture / forest / urban) + контраст',
+  'Рівно 4 абзаци, кожен зі своєю роботою',
+  'Body згруповано за логікою (регіон 1 / регіони 2+3 або за типом землі), не «діаграма за діаграмою»',
+  'Present simple усюди — дат немає; жодного дієслова руху',
+  'Є хоча б два дроби (nearly half, well over half, just…)',
+  'Принаймні 3 різні дієслова часток (account for / constitute / represent…)',
+  '150+ слів, встиг за 20 хвилин'
+];
+function buildChecklist(id, items){
+  document.getElementById(id).innerHTML = items.map(c=>'<label class="chk"><input type="checkbox" class="'+id+'-item"><span>'+c+'</span></label>').join('');
+}
+buildChecklist('chk2', CHECKS2);
+buildChecklist('chk3', CHECKS3);
+
+['essay2','essay3'].forEach((id,i)=>{
+  document.getElementById(id).addEventListener('input', function(){
+    const n = this.value.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById('wc'+(i+2)).textContent = n + ' слів (мінімум 150)' + (n>=150?' ✓':'');
+  });
+});
+
+function setupUnlock(btnId, chkPrefix, modelId, fbId, wrapId, essayId){
+  document.getElementById(btnId).addEventListener('click', function(){
+    const items = document.querySelectorAll('.'+chkPrefix+'-item');
+    let cnt = 0;
+    items.forEach(c=>{ if(c.checked) cnt++; });
+    const fb = document.getElementById(fbId);
+    if(cnt === items.length){
+      const ta = document.getElementById(essayId);
+      ta.readOnly = true; ta.classList.add('locked');
+      document.getElementById(modelId).style.display='block';
+      document.getElementById(wrapId).style.display='block';
+      fb.innerHTML='<span style="color:var(--green)">✓ Роботу здано. Порівнюй свої рішення з моделлю — і перепиши слабке місце.</span>';
+      document.getElementById(modelId).scrollIntoView({behavior:'smooth', block:'start'});
+    } else {
+      fb.innerHTML='<span style="color:var(--red)">Відмічено '+cnt+' з '+items.length+'. Спершу чесна самоперевірка — потім модель.</span>';
+    }
+  });
+}
+setupUnlock('unlock2','chk2','model2','fb2','rw2','essay2');
+setupUnlock('unlock3','chk3','model3','fb3','rw3','essay3');
+
+let time3 = 1200, iv3 = null;
+document.getElementById('start3').addEventListener('click', function(){
+  if(iv3) return;
+  iv3 = setInterval(()=>{
+    time3--;
+    const m = Math.floor(time3/60), s = time3%60;
+    const el = document.getElementById('timer3');
+    el.textContent = m + ':' + (s<10?'0':'') + s;
+    if(time3<=0){ clearInterval(iv3); el.textContent='0:00 · час вийшов'; el.style.color='var(--red)'; }
+  },1000);
+  this.textContent='Таймер іде…'; this.style.opacity='.55'; this.disabled=true;
+});
+</script>
+</body>
+</html>

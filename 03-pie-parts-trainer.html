@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажер 3 · Пиши по частинах — Pie Charts</title>
+<style>
+:root{
+  --bg:#F7F5EC; --card:#FFFFFF; --ink:#22271E; --muted:#6E7468; --line:#E4E1D2;
+  --green:#1E5631; --green-soft:#E9F2E4;
+  --lime:#84CC16; --lime-soft:#F2F9E0;
+  --yellow:#FDE047;
+  --orange:#E8890C; --orange-soft:#FCF1DE;
+  --red:#B3402E; --red-soft:#F8E9E5;
+  --purple:#7A5AA0; --purple-soft:#F1ECF7;
+  --blue:#2E5A88;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:16.5px; line-height:1.6; padding:24px 16px 60px;}
+.wrap{max-width:980px; margin:0 auto;}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif; color:var(--green); line-height:1.25;}
+h1{font-size:30px; margin-bottom:6px;}
+h2{font-size:22px; margin:36px 0 14px;}
+h3{font-size:18px; margin:18px 0 10px;}
+.sub{color:var(--muted); font-size:14.5px; margin-bottom:20px;}
+mark{background:var(--yellow); padding:0 3px; border-radius:2px;}
+.bc{font-size:13px; color:var(--muted); margin-bottom:14px;}
+.bc b{color:var(--green);}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:20px; box-shadow:0 1px 3px rgba(30,60,30,.05);}
+.task-img{width:100%; max-width:640px; border:1px solid var(--line); border-radius:10px; margin:12px 0; overflow:hidden;}
+.step-tag{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:20px; padding:3px 12px; margin-bottom:10px;}
+.tag-green{color:var(--green); background:var(--green-soft); border:1px solid var(--green);}
+.tag-orange{color:var(--orange); background:var(--orange-soft); border:1px solid var(--orange);}
+.instr{background:var(--green-soft); border:1.5px solid var(--green); border-radius:12px; padding:14px 16px; margin:12px 0; font-size:15.5px;}
+.instr .lbl{display:block; font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--green); margin-bottom:6px;}
+.btn{display:inline-block; border:none; border-radius:10px; padding:11px 18px; font-size:14.5px; font-weight:600; cursor:pointer; margin:6px 6px 0 0; font-family:inherit;}
+.btn-primary{background:var(--green); color:#fff;}
+.btn-solution{background:transparent; border:1.5px solid var(--orange); color:var(--orange);}
+.btn-reset{background:transparent; border:1.5px solid var(--line); color:var(--muted);}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+.btn:hover:not(:disabled){opacity:.85;}
+textarea{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:13px 15px; font-size:16px; font-family:inherit; background:var(--card); color:var(--ink); resize:vertical;}
+textarea:focus{outline:none; border-color:var(--green);}
+textarea.locked{background:#F4F2E8; border-style:dashed;}
+.attempt{background:var(--purple-soft); border:1.5px solid var(--purple); border-radius:10px; padding:12px 15px; font-size:14.5px; margin-top:12px;}
+.attempt .lbl{display:block; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--purple); margin-bottom:5px;}
+.model{display:none; margin-top:14px; border-left:3px solid var(--green); background:var(--green-soft); padding:13px 16px; border-radius:0 10px 10px 0; font-size:14.5px;}
+.model .alt{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
+.opt{display:flex; gap:12px; align-items:flex-start; padding:14px 15px; border:1.5px solid var(--line); border-radius:10px; margin-bottom:9px; cursor:pointer; font-size:16.5px; line-height:1.5; background:var(--card);}
+.opt:hover{border-color:var(--green);}
+.opt input{margin-top:5px; accent-color:var(--green); flex-shrink:0; width:18px; height:18px;}
+.opt .why{display:none; font-size:14.5px; margin-top:6px;}
+.opt.ok{border-color:var(--green); background:var(--green-soft);}
+.opt.ok .why{display:block; color:var(--green);}
+.opt.bad{border-color:var(--red); background:var(--red-soft);}
+.opt.bad .why{display:block; color:var(--red);}
+.fb{margin-top:10px; font-size:15px; font-weight:600;}
+.rule{background:var(--lime-soft); border:1.5px solid var(--lime); border-radius:14px; padding:18px 20px; margin:28px 0;}
+.rule h3{margin-top:0;}
+.rule li{margin:7px 0 7px 18px;}
+.divider{border:none; border-top:2px dashed var(--line); margin:36px 0;}
+.small{font-size:13.5px; color:var(--muted);}
+.err-list li{margin:7px 0 7px 18px; font-size:14.5px;}
+details.card summary{cursor:pointer; font-weight:600; color:var(--purple);}
+.trap-table{width:100%; border-collapse:collapse; font-size:14px;}
+.trap-table td, .trap-table th{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+.trap-table th{background:var(--green-soft); color:var(--green);}
+.x{color:var(--red);} .v{color:var(--green);}
+@media (max-width:640px){
+  body{padding:16px 10px 44px; font-size:15.5px;}
+  h1{font-size:24px;} h2{font-size:19px;}
+  .card{padding:14px;}
+  .opt{font-size:15.5px; padding:12px;}
+  .btn{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="bc">Модуль 2 · Pie Charts → <b>Тренажер 3 з 4</b></div>
+<h1>Пиши по частинах</h1>
+<p class="sub">Ти вмієш бачити історії (Тренажер 1) і групувати долі (Тренажер 2). Тепер — писати. Спочатку твоя спроба, потім модель: порівнюй рішення, а не слова.</p>
+
+<div class="instr">
+  <span class="lbl">Як проходити цей тренажер</span>
+  Кнопка з моделлю відкривається лише після твоєї спроби (мінімум ~5 слів). Після відкриття твій текст <mark>зафіксовується</mark> і лежить поруч із моделлю. Словник відкритий завжди — це інструмент.
+</div>
+
+<!-- ============ 3.1 INTRODUCTION ============ -->
+<h2>3.1 · Introduction — перефраз, ніколи копія</h2>
+<div class="card">
+  <span class="step-tag tag-green">Правило · три ходи</span>
+  <p style="font-size:15.5px;">1) Заміни дієслово: <i>show → illustrate / compare / give a breakdown of</i>. 2) Іменникова група: <i>how energy is used → the proportion of energy consumed</i>. 3) Додай, чого завдання не назвало: скільки діаграм, <i>respectively</i>, одиниці. Жодних цифр і висновків у §1.</p>
+</div>
+
+<div class="card">
+  <h3>Завдання 1 · Household energy use</h3>
+  <div class="task-img"><svg viewBox="0 0 340 400" width="100%" style="display:block;background:#fff;"><text x="170.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Energy use in an average household, by purpose</text><text x="170.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Average household</text><path d="M170.0,195 L170.0,100.0 A95,95 0 0 1 215.8,278.2 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="225.2" y="184.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">42%</text><path d="M170.0,195 L215.8,278.2 A95,95 0 0 1 76.7,212.8 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="145.7" y="250.6" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M170.0,195 L76.7,212.8 A95,95 0 0 1 100.7,130.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="115.3" y="183.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M170.0,195 L100.7,130.0 A95,95 0 0 1 135.0,106.7 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><polyline points="114.4,113.1 105.4,99.9" fill="none" stroke="#C94F7C" stroke-width="1.2"/><text x="105.4" y="103.9" font-size="12" font-weight="700" text-anchor="end" fill="#C94F7C" font-family="Segoe UI,sans-serif">7%</text><path d="M170.0,195 L135.0,106.7 A95,95 0 0 1 158.1,100.7 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="145.4,99.1 141.4,83.6" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="141.4" y="87.6" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">4%</text><path d="M170.0,195 L158.1,100.7 A95,95 0 0 1 170.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><polyline points="163.8,96.2 162.8,80.2" fill="none" stroke="#2F8F83" stroke-width="1.2"/><text x="162.8" y="84.2" font-size="12" font-weight="700" text-anchor="end" fill="#2F8F83" font-family="Segoe UI,sans-serif">2%</text><rect x="-288.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-269.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Heating &amp; cooling</text><rect x="-107.80000000000001" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="-88.80000000000001" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Water heating</text><rect x="42.0" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="61.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other appliances</text><rect x="214.6" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="233.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Refrigeration</text><rect x="364.4" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="383.4" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Lighting</text><rect x="476.2" y="368" width="13" height="13" rx="3" fill="#2F8F83"/><text x="495.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Cooking</text></svg></div>
+  <div class="instr"><span class="lbl">Інструкція до завдання</span>Перефразуй (1–2 речення, без даних):<br><i>The pie chart below shows how energy is used in an average household, broken down by purpose.</i></div>
+  <textarea id="i1" rows="2" placeholder="The pie chart illustrates..."></textarea>
+  <button class="btn btn-solution" id="b1" disabled>Показати модель</button>
+  <div id="a1"></div>
+  <div class="model" id="m1">
+    <b>Модель:</b> The pie chart illustrates how energy is consumed in an average household, broken down by purpose.
+    <p class="small" style="margin-top:8px;">Українською: «broken down by purpose» — перефраз «by purpose»; present simple, бо дат немає.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Завдання 2 · Age structure, three countries</h3>
+  <div class="task-img"><svg viewBox="0 0 870 400" width="100%" style="display:block;background:#fff;"><text x="435.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Age structure of the population, three countries</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country A</text><path d="M165.0,195 L165.0,100.0 A95,95 0 0 1 230.0,125.7 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="186.0" y="146.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M165.0,195 L230.0,125.7 A95,95 0 1 1 74.6,224.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="195.5" y="247.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">58%</text><path d="M165.0,195 L74.6,224.4 A95,95 0 0 1 165.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="118.9" y="165.5" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country B</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 528.3,177.2 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="471.3" y="155.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">22%</text><path d="M435.0,195 L528.3,177.2 A95,95 0 1 1 361.8,134.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="420.8" y="254.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">64%</text><path d="M435.0,195 L361.8,134.4 A95,95 0 0 1 435.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="410.7" y="147.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">14%</text><text x="705.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country C</text><path d="M705.0,195 L705.0,100.0 A95,95 0 0 1 740.0,283.3 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="761.0" y="188.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">44%</text><path d="M705.0,195 L740.0,283.3 A95,95 0 1 1 675.6,104.6 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="651.4" y="218.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">51%</text><path d="M705.0,195 L675.6,104.6 A95,95 0 0 1 705.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><polyline points="689.5,97.2 687.0,81.4" fill="none" stroke="#4A7C59" stroke-width="1.2"/><text x="687.0" y="85.4" font-size="12" font-weight="700" text-anchor="end" fill="#4A7C59" font-family="Segoe UI,sans-serif">5%</text><rect x="234.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="253.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">0–14 years</text><rect x="361.0" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="380.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">15–59 years</text><rect x="495.6" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="514.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">60+ years</text></svg></div>
+  <div class="instr"><span class="lbl">Інструкція до завдання</span><i>The three pie charts below show the age structure of the population in three countries, divided into three age groups.</i></div>
+  <textarea id="i2" rows="2" placeholder="The three pie charts compare..."></textarea>
+  <button class="btn btn-solution" id="b2" disabled>Показати модель</button>
+  <div id="a2"></div>
+  <div class="model" id="m2">
+    <b>Модель:</b> The three pie charts compare the age structure of the population in three countries, divided into three age groups.
+    <p class="small" style="margin-top:8px;">Українською: тут завдання вже стисле — модель майже дзеркалить його, але дієслово змінено (compare) і цього достатньо для екзамену.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Завдання 3 · Export composition, two economies</h3>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Composition of exports, two economies</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Economy A</text><path d="M165.0,195 L165.0,100.0 A95,95 0 1 1 91.8,255.6 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="216.6" y="223.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">64%</text><path d="M165.0,195 L91.8,255.6 A95,95 0 0 1 70.0,195.0 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="111.4" y="218.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">11%</text><path d="M165.0,195 L70.0,195.0 A95,95 0 0 1 84.8,144.1 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="110.3" y="183.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">9%</text><path d="M165.0,195 L84.8,144.1 A95,95 0 0 1 95.7,130.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><polyline points="86.8,134.3 74.1,124.5" fill="none" stroke="#C94F7C" stroke-width="1.2"/><text x="74.1" y="128.5" font-size="12" font-weight="700" text-anchor="end" fill="#C94F7C" font-family="Segoe UI,sans-serif">3%</text><path d="M165.0,195 L95.7,130.0 A95,95 0 0 1 104.4,121.8 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="97.2,122.8 86.3,111.2" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="86.3" y="115.2" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">2%</text><path d="M165.0,195 L104.4,121.8 A95,95 0 0 1 165.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><text x="145.7" y="145.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">11%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Economy B</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 458.6,103.0 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><polyline points="447.4,96.8 449.4,80.9" fill="none" stroke="#2E5A88" stroke-width="1.2"/><text x="449.4" y="84.9" font-size="12" font-weight="700" text-anchor="start" fill="#2E5A88" font-family="Segoe UI,sans-serif">4%</text><path d="M435.0,195 L458.6,103.0 A95,95 0 0 1 508.2,134.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="465.5" y="150.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><path d="M435.0,195 L508.2,134.4 A95,95 0 0 1 521.0,235.4 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="491.6" y="191.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">18%</text><path d="M435.0,195 L521.0,235.4 A95,95 0 0 1 370.0,264.3 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="445.7" y="255.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M435.0,195 L370.0,264.3 A95,95 0 0 1 370.0,125.7 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><text x="378.0" y="199.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">26%</text><path d="M435.0,195 L370.0,125.7 A95,95 0 0 1 435.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><text x="414.0" y="146.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><rect x="-90.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-71.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Oil &amp; gas</text><rect x="29.39999999999999" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="48.39999999999999" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Metals</text><rect x="125.99999999999999" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="145.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Agriculture</text><rect x="260.59999999999997" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="279.59999999999997" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Machinery</text><rect x="379.99999999999994" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="398.99999999999994" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Electronics</text><rect x="514.5999999999999" y="368" width="13" height="13" rx="3" fill="#2F8F83"/><text x="533.5999999999999" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other goods</text></svg></div>
+  <div class="instr"><span class="lbl">Інструкція до завдання</span><i>The two pie charts below compare the composition of exports in two economies, broken down by type of goods.</i></div>
+  <textarea id="i3" rows="2" placeholder="The two pie charts compare..."></textarea>
+  <button class="btn btn-solution" id="b3" disabled>Показати модель</button>
+  <div id="a3"></div>
+  <div class="model" id="m3">
+    <b>Модель:</b> The two pie charts compare the composition of exports in two economies, broken down by type of goods.
+    <p class="small" style="margin-top:8px;">Українською: складне речення завдання чесно перефразовується мінімально — головне, щоб не було 3+ слів поспіль з копіпасти.</p>
+  </div>
+</div>
+
+<!-- ============ 3.2 OVERVIEW MCQ ============ -->
+<h2>3.2 · Overview · спочатку правило, потім контроль</h2>
+<div class="card">
+  <span class="step-tag tag-orange">Правило overview</span>
+  <p style="font-size:15.5px;">Overview = <mark>дві історії, нуль цифр, нуль причин</mark>. Порушення трьох типів: <b>(1)</b> зайва цифра або дрібна деталь; <b>(2)</b> причина чи інформація, якої немає на діаграмі; <b>(3)</b> речення гарне й чисте — тоді все добре.</p>
+</div>
+<div class="card">
+  <div id="ov-items"></div>
+  <button class="btn btn-primary" onclick="checkOV()">Перевірити</button>
+  <button class="btn btn-reset" onclick="resetOV()">Спробувати ще</button>
+  <div class="fb" id="ov-fb"></div>
+</div>
+
+<!-- ============ 3.3 BODY ============ -->
+<h2>3.3 · Body-речення · «Доля → фраза»</h2>
+<div class="card">
+  <div class="instr"><span class="lbl">Інструкція до завдання</span>Нижче — сирий факт. Обери фразу рівня Band 7.5+. Після перевірки читай пояснення: саме воно вчить. Пам'ятай правило №1: коло не рухається (доки немає дат).</div>
+</div>
+<div id="body-tasks"></div>
+
+<details class="card" style="margin-top:20px;">
+  <summary>Словник: матриця часток + точність (відкрити)</summary>
+  <div style="margin-top:12px; font-size:14.5px; overflow-x:auto;">
+    <table class="trap-table">
+      <tr><th>Розмір долі</th><th>Дієслова часток</th><th>Дроби</th><th>Прикметники</th></tr>
+      <tr><td><b>Домінантна &gt;50%</b></td><td>accounted for over half of · constituted the majority of</td><td>well over half · the bulk of · more than one in two</td><td>dominant · overwhelming · the lion's share</td></tr>
+      <tr><td><b>Велика 25–50%</b></td><td>made up · represented · comprised</td><td>just over a third · a quarter of · nearly half</td><td>the largest share · significant · substantial</td></tr>
+      <tr><td><b>Помірна 10–25%</b></td><td>accounted for · constituted · formed</td><td>one in five · roughly a fifth · just under a quarter</td><td>considerable · notable · a sizeable minority</td></tr>
+      <tr><td><b>Мала &lt;10%</b></td><td>made up · represented · amounted to</td><td>under one in ten · a small fraction · barely 3%</td><td>negligible · marginal · a mere 3%</td></tr>
+    </table>
+    <p style="margin-top:10px;"><b>Порівняння:</b> twice as high · nearly double · almost three times the figure for… · was nearly halved · broadly comparable · considerably larger · compared to/with.<br>
+    <b>Датовані діаграми:</b> from X% to Y% · by X percentage points · overtook · lost its dominant position · grew sevenfold.</p>
+    <p class="small" style="margin-top:6px;">Правило: «Games was big» = Band 5. «Games accounted for well over half of tablet time» = Band 7+. Кожен другий відсоток — у дріб.</p>
+  </div>
+</details>
+
+<!-- ============ 3.4 GRAMMAR ============ -->
+<h2>3.4 · Граматика 7.5 · «Виправ абзац»</h2>
+<div class="card">
+  <div class="instr"><span class="lbl">Інструкція до завдання</span>Ось справжній абзац рівня Band 5 (ти впізнаєш свої фрази?). Впиши <b>свою виправлену версію</b> англійською, зберігши всі факти. Модель відкриється лише після твоєї спроби.</div>
+  <div style="background:var(--orange-soft); border:1px solid var(--orange); border-radius:10px; padding:12px 15px; font-size:15px; margin:12px 0;"><i>Car was the biggest in 2005 at 55%. It went down to 38% in 2025. Public transport went up from 27% to 30%. Cycling went up from 8% to 15% and walking went up a little. Working from home was 1% and went up to 7%.</i></div>
+  <textarea id="fx" rows="4" placeholder="In 2005, over half of all commuters..."></textarea>
+  <button class="btn btn-solution" id="bfx" disabled>Показати версію Band 8 + розбір</button>
+  <div id="afx"></div>
+  <div class="model" id="mfx">
+    <b>Версія Band 8:</b> In 2005, over half of all commuters — 55% — travelled by car, and just over a quarter used public transport. Cycling and walking accounted for only 8% and 9% respectively, and a mere 1% worked from home. By 2025, the picture had changed markedly: the car share had fallen to 38%, while public transport had edged up to 30%. Cycling nearly doubled to 15%, walking rose slightly to 10%, and working from home grew sevenfold to 7%.
+    <ul class="err-list" style="margin-top:12px;">
+      <li><span class="x">was the biggest</span> → <span class="v">remained the most common</span> — категорія не може «бути великою», великою може бути частка.</li>
+      <li><span class="x">went down / went up ×4</span> → <span class="v">had fallen to / edged up / rose slightly / grew sevenfold</span> — сила слова відповідає розміру зміни.</li>
+      <li><span class="x">55% / 27% / 1%</span> → <span class="v">over half / just over a quarter / a mere 1%</span> — кожен другий відсоток у дріб.</li>
+      <li><span class="x">однакові прості речення</span> → <span class="v">By 2025, the picture had changed markedly: …</span> — двокрапка + past perfect, рівень Band 8.</li>
+      <li><span class="x">Cycling went up from 8% to 15%</span> → <span class="v">nearly doubled to 15%</span> — множник замість пари чисел.</li>
+      <li><span class="x">WFH was 1% and went up to 7%</span> → <span class="v">grew sevenfold to 7%</span> — sevenfold: 1→7. Точний множник = сильна фраза.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Контрольна · 6 пасток для українців</h3>
+  <div class="instr"><span class="lbl">Навіщо ця контрольна</span>Граматика — 25% оцінки, і ці помилки екзаменатор бачить одразу. Пройди: якщо всі 6 — ти їх більше не робитимеш.</div>
+  <div id="traps"></div>
+  <button class="btn btn-primary" onclick="checkTraps()">Перевірити</button>
+  <button class="btn btn-reset" onclick="resetTraps()">Спробувати ще</button>
+  <div class="fb" id="traps-fb"></div>
+  <details style="margin-top:14px;">
+    <summary style="cursor:pointer; font-weight:600; color:var(--purple);">Повна таблиця пасток (відкрити)</summary>
+    <table class="trap-table" style="margin-top:10px;">
+      <tr><th>Пастка</th><th>✗ Неправильно</th><th>✓ Правильно</th></tr>
+      <tr><td>«Найбільша частка»</td><td class="x">the most big share</td><td class="v">the largest share</td></tr>
+      <tr><td>«У два рази»</td><td class="x">in 2 times bigger</td><td class="v">twice as high / nearly double</td></tr>
+      <tr><td>«Гра була найбільшою»</td><td class="x">Games was the biggest</td><td class="v">Games accounted for the largest share</td></tr>
+      <tr><td>Минулий час без дат</td><td class="x">games accounted for 35%</td><td class="v">games account for 35%</td></tr>
+      <tr><td>«Відсотки» іменником</td><td class="x">35 percents</td><td class="v">35 percent / 35%</td></tr>
+      <tr><td>account без for</td><td class="x">Games accounts 35%</td><td class="v">Games accounts for 35%</td></tr>
+      <tr><td>«діаграма показує нам»</td><td class="x">the chart shows us</td><td class="v">the chart shows</td></tr>
+      <tr><td>Узгодження</td><td class="x">Social networking represent 29%</td><td class="v">Social networking represents 29%</td></tr>
+    </table>
+  </details>
+</div>
+
+<div class="rule">
+  <h3>Підсумок тренажера · що ти тепер вмієш</h3>
+  <ul>
+    <li><b>Introduction</b> — три ходи + <i>respectively</i>, якщо діаграм кілька.</li>
+    <li><b>Overview</b> — дві історії, нуль цифр; розпізнаєш три типи порушень.</li>
+    <li><b>Body</b> — дієслово частки + дріб + оцінний прикметник; множники замість пар чисел.</li>
+    <li><b>Граматика 7.5</b> — дати визначають час, account for, largest share, узгодження.</li>
+  </ul>
+  <p class="small" style="margin-top:10px;">Навіщо це далі: Тренажер 4 — три нових діаграми, три рівні самостійності: від підказок до чистого іспиту.</p>
+</div>
+
+</div>
+
+<script>
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function gateModel(btnId, taId, modelId, attId){
+  const btn = document.getElementById(btnId), ta = document.getElementById(taId), m = document.getElementById(modelId);
+  ta.addEventListener('input', function(){ btn.disabled = ta.value.trim().length < 25; });
+  btn.addEventListener('click', function(){
+    if(btn.disabled) return;
+    ta.readOnly = true; ta.classList.add('locked'); btn.disabled = true;
+    document.getElementById(attId).innerHTML = '<div class="attempt"><span class="lbl">Твоя зафіксована спроба</span>'+esc(ta.value)+'</div>';
+    m.style.display = 'block';
+    m.scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+}
+gateModel('b1','i1','m1','a1');
+gateModel('b2','i2','m2','a2');
+gateModel('b3','i3','m3','a3');
+gateModel('bfx','fx','mfx','afx');
+
+/* ---- 3.2 overview MCQ ---- */
+const OVS = [
+  { s:"Overall, heating and cooling accounts for 42% of household energy, followed by water heating at 30%.",
+    opts:["Це нормальне overview-речення","Тут зайва цифра або дрібна деталь","Тут зайве пояснення чи інформація, якої немає на діаграмі"], a:1,
+    w:"«42%… 30%» — це body. Правильно: «by far the largest share… nearly three quarters»." },
+  { s:"Overall, Economy A depends on oil because it has no other industries.",
+    opts:["Це нормальне overview-речення","Тут зайва цифра або дрібна деталь","Тут зайве пояснення чи інформація, якої немає на діаграмі"], a:2,
+    w:"«because it has no other industries» — причина, якої немає на діаграмах." },
+  { s:"Overall, working-age people form the majority in all three countries, though the balance of young and old differs strikingly.",
+    opts:["Це нормальне overview-речення","Тут зайва цифра або дрібна деталь","Тут зайве пояснення чи інформація, якої немає на діаграмі"], a:0,
+    w:"Саме так: узагальнення для всіх дев'яти долей + контраст, жодної цифри." },
+  { s:"Overall, refrigeration accounts for exactly 7% of energy use, with lighting at 4%.",
+    opts:["Це нормальне overview-речення","Тут зайва цифра або дрібна деталь","Тут зайве пояснення чи інформація, якої немає на діаграмі"], a:1,
+    w:"Дві дрібні долі з точними числами — це деталь для body, а не огляд." }
+];
+(function(){
+  document.getElementById('ov-items').innerHTML = OVS.map((o,i)=>
+    '<p style="font-size:15.5px; margin:14px 0 8px;"><b>'+(i+1)+'.</b> <i>'+o.s+'</i></p>'+
+    o.opts.map((t,j)=>'<label class="opt" id="oo-'+i+'-'+j+'" style="margin-bottom:6px;"><input type="radio" name="ov'+i+'" id="oi-'+i+'-'+j+'"><span>'+t+'<div class="why" id="ow-'+i+'-'+j+'"></div></span></label>').join('')
+  ).join('');
+})();
+function checkOV(){
+  let c=0;
+  OVS.forEach((o,i)=>{
+    o.opts.forEach((t,j)=>{
+      const lab=document.getElementById('oo-'+i+'-'+j), why=document.getElementById('ow-'+i+'-'+j);
+      lab.classList.remove('ok','bad'); why.innerHTML='';
+      if(document.getElementById('oi-'+i+'-'+j).checked){
+        const good=j===o.a;
+        lab.classList.add(good?'ok':'bad'); why.innerHTML=(good?'✓ ':'✗ ')+o.w;
+        if(good)c++;
+      }
+    });
+  });
+  const fb=document.getElementById('ov-fb');
+  fb.innerHTML = c===4 ? '<span style="color:var(--green)">✓ 4 з 4. Тепер ти бачиш overview очима екзаменатора.</span>'
+                       : '<span style="color:var(--red)">'+c+' з 4. Читай пояснення до помилених — і спробуй ще.</span>';
+}
+function resetOV(){
+  OVS.forEach((o,i)=>o.opts.forEach((t,j)=>{
+    document.getElementById('oi-'+i+'-'+j).checked=false;
+    document.getElementById('oo-'+i+'-'+j).classList.remove('ok','bad');
+    document.getElementById('ow-'+i+'-'+j).innerHTML='';
+  }));
+  document.getElementById('ov-fb').innerHTML='';
+}
+
+/* ---- 3.3 body tasks ---- */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const BODY = [
+  { data:'Домашня енергія: heating & cooling = 42% (діаграма без дат)', opts: shuffle([
+    {t:'heating and cooling accounts for by far the largest share, at 42%', ok:true, w:'Дієслово частки + оцінка (by far the largest) + present simple — дат немає.'},
+    {t:'heating and cooling increased to 42%', ok:false, w:'Правило №1: коло не рухається. Дієслово руху на діаграмі без дат = помилка.'},
+    {t:'heating and cooling was the biggest', ok:false, w:'«was the biggest» — дві помилки: минулий час без дат + Band 5 фраза.'}])},
+  { data:'Поїздки на роботу: автомобіль 55% (2005) → 38% (2025)', opts: shuffle([
+    {t:'the car share had fallen to 38%, though it remained the most common mode', ok:true, w:'Past perfect + remained: подія + роль лідера, що лишилась.'},
+    {t:'the car went down slowly to 38%', ok:false, w:'−17 п.п. — це не «slowly», і past perfect тут природніший.'},
+    {t:'car was 38% in 2025 and this is less than before', ok:false, w:'Розмовна конструкція без жодного сигналу діапазону.'}])},
+  { data:'Робота з дому: 1% (2005) → 7% (2025)', opts: shuffle([
+    {t:'working from home increased in seven times', ok:false, w:'Калька «в сім разів». Англійська: grew sevenfold.'},
+    {t:'working from home was 1% and became 7%', ok:false, w:'Дві мертві цифри без жодної ідеї.'},
+    {t:'working from home grew sevenfold to 7%', ok:true, w:'Точний множник — найелегантніший спосіб описати малу, але драматичну зміну.'}])},
+  { data:'Вікова структура: 60+ у країні A = 30%, у країні C = 5% (без дат)', opts: shuffle([
+    {t:'the over-60 share in Country A is six times the figure for Country C', ok:true, w:'30÷5=6 — чесний множник; «the figure for» уникає повтору.'},
+    {t:'Country A has in 2 times more old people', ok:false, w:'Калька «у два рази» + порівняння країн, а не часток.'},
+    {t:'Country A is bigger on 25% than Country C', ok:false, w:'Неграматична конструкція; до того ж 25 п.п. ≠ 25%.'}])},
+  { data:'Експорт економіки B: machinery 30% + electronics 26% (без дат)', opts: shuffle([
+    {t:'machinery and electronics together went up to 56%', ok:false, w:'«went up» — дієслово руху; дат немає, зростання не показано.'},
+    {t:'machinery and electronics together make up well over half of exports', ok:true, w:'Агрегат двох долей у дріб (well over half) — найсильніший хід пайчарта.'},
+    {t:'machinery and electronics are big in Economy B', ok:false, w:'«are big» — Band 5.'}])}
+];
+(function(){
+  document.getElementById('body-tasks').innerHTML = BODY.map((b,i)=>
+    '<div class="card"><h3>Завдання '+(i+1)+' · '+b.data+'</h3>'+
+    b.opts.map((o,j)=>'<label class="opt" id="bo-'+i+'-'+j+'"><input type="radio" name="b'+i+'" id="bi-'+i+'-'+j+'"><span>'+o.t+'<div class="why" id="bw-'+i+'-'+j+'"></div></span></label>').join('')+
+    '<button class="btn btn-primary" onclick="checkBody('+i+')">Перевірити</button> '+
+    '<button class="btn btn-reset" onclick="resetBody('+i+')">Спробувати ще</button>'+
+    '<div class="fb" id="bf-'+i+'"></div></div>'
+  ).join('');
+})();
+function checkBody(i){
+  BODY[i].opts.forEach((o,j)=>{
+    const lab=document.getElementById('bo-'+i+'-'+j), why=document.getElementById('bw-'+i+'-'+j);
+    lab.classList.remove('ok','bad'); why.innerHTML='';
+    if(document.getElementById('bi-'+i+'-'+j).checked){
+      lab.classList.add(o.ok?'ok':'bad'); why.innerHTML=(o.ok?'✓ ':'✗ ')+o.w;
+      document.getElementById('bf-'+i).innerHTML = o.ok ? '<span style="color:var(--green)">✓ Саме так.</span>' : '<span style="color:var(--red)">Не зовсім — читай пояснення.</span>';
+    }
+  });
+}
+function resetBody(i){
+  BODY[i].opts.forEach((o,j)=>{
+    document.getElementById('bi-'+i+'-'+j).checked=false;
+    document.getElementById('bo-'+i+'-'+j).classList.remove('ok','bad');
+    document.getElementById('bw-'+i+'-'+j).innerHTML='';
+  });
+  document.getElementById('bf-'+i).innerHTML='';
+}
+
+/* ---- 3.4 traps ---- */
+const TRAPS = [
+  { q:'Найбільша частка (доля).', opts:['the most big share','the largest share','the biggest share number'], a:1,
+    w:'Для часток суперлатив від large: the largest share.'},
+  { q:'«У два рази більше» (частка A = 40%, частка B = 20%).', opts:['A is in 2 times bigger than B','A is twice as high as B','A is more two times than B'], a:1,
+    w:'twice as high / nearly double. Англійська ніколи не каже «in times».'},
+  { q:'Ігри — найбільша категорія (діаграма без дат).', opts:['Games was the biggest.','Games accounted for the largest share.','Games is the biggest one.'], a:1,
+    w:'Категорія не може «бути великою» — великою є частка: accounted for the largest share.'},
+  { q:'Частка ігор = 35% (діаграма БЕЗ дат).', opts:['Games accounted for 35%.','Games accounts for 35%.','Games has accounted for 35%.'], a:1,
+    w:'Немає дат → present simple. Минулий час тут зайвий.'},
+  { q:'35 відсотків.', opts:['35 percents','35 percent','35 of percents'], a:1,
+    w:'percent у такому вживанні не має множини: 35 percent / 35%.'},
+  { q:'Узгодження: Social networking (однина).', opts:['Social networking represent 29%.','Social networking represents 29%.','Social networking representing 29%.'], a:1,
+    w:'Назва категорії — однина: represents.'}
+];
+(function(){
+  document.getElementById('traps').innerHTML = TRAPS.map((t,i)=>
+    '<p style="font-size:15.5px; margin:14px 0 8px;"><b>'+(i+1)+'.</b> '+t.q+'</p>'+
+    shuffle(t.opts.map((o,idx)=>({o:o, idx:idx}))).map(x=>'<label class="opt" id="to-'+i+'-'+x.idx+'" style="margin-bottom:6px;"><input type="radio" name="t'+i+'" id="ti-'+i+'-'+x.idx+'"><span>'+x.o+'<div class="why" id="tw-'+i+'-'+x.idx+'"></div></span></label>').join('')
+  ).join('');
+})();
+function checkTraps(){
+  let c=0;
+  TRAPS.forEach((t,i)=>{
+    t.opts.forEach((o,j)=>{
+      const lab=document.getElementById('to-'+i+'-'+j), why=document.getElementById('tw-'+i+'-'+j);
+      lab.classList.remove('ok','bad'); why.innerHTML='';
+      if(document.getElementById('ti-'+i+'-'+j).checked){
+        const good = j===t.a;
+        lab.classList.add(good?'ok':'bad'); why.innerHTML=(good?'✓ ':'✗ ')+t.w;
+        if(good) c++;
+      }
+    });
+  });
+  const fb=document.getElementById('traps-fb');
+  fb.innerHTML = c>=5 ? '<span style="color:var(--green)">✓ '+c+' з 6. Граматика тримана — саме вона часто недотягує до 7.5.</span>'
+                      : '<span style="color:var(--red)">'+c+' з 6. Перечитай таблицю пасток вище й пройди ще раз.</span>';
+}
+function resetTraps(){
+  TRAPS.forEach((t,i)=>t.opts.forEach((o,j)=>{
+    document.getElementById('ti-'+i+'-'+j).checked=false;
+    document.getElementById('to-'+i+'-'+j).classList.remove('ok','bad');
+    document.getElementById('tw-'+i+'-'+j).innerHTML='';
+  }));
+  document.getElementById('traps-fb').innerHTML='';
+}
+</script>
+</body>
+</html>

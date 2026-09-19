@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словник модуля · Pie Charts</title>
+<style>
+:root{
+  --bg:#F7F5EC; --card:#FFFFFF; --ink:#22271E; --muted:#6E7468; --line:#E4E1D2;
+  --green:#1E5631; --green-soft:#E9F2E4;
+  --lime:#84CC16; --lime-soft:#F2F9E0;
+  --yellow:#FDE047;
+  --orange:#E8890C; --orange-soft:#FCF1DE;
+  --red:#B3402E; --red-soft:#F8E9E5;
+  --purple:#7A5AA0; --purple-soft:#F1ECF7;
+  --blue:#2E5A88;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:15px; line-height:1.55; padding:24px 16px 60px;}
+.wrap{max-width:980px; margin:0 auto;}
+h1,h2{font-family:Georgia,'Times New Roman',serif; color:var(--green);}
+h1{font-size:28px; margin-bottom:6px;}
+h2{font-size:20px; margin:30px 0 10px; border-bottom:2px solid var(--lime); padding-bottom:4px;}
+.sub{color:var(--muted); font-size:14px; margin-bottom:20px;}
+mark{background:var(--yellow); padding:0 3px; border-radius:2px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:16px; box-shadow:0 1px 3px rgba(30,60,30,.05);}
+table{width:100%; border-collapse:collapse; font-size:14px; margin-top:8px;}
+th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+th{background:var(--green-soft); color:var(--green); font-weight:600;}
+tr:nth-child(even) td{background:#FBFAF4;}
+.note{background:var(--purple-soft); border-left:3px solid var(--purple); padding:10px 14px; border-radius:0 8px 8px 0; font-size:13px; margin-top:10px;}
+.warn{background:var(--red-soft); border-left:3px solid var(--red); padding:10px 14px; border-radius:0 8px 8px 0; font-size:13px; margin-top:10px;}
+.small{font-size:12.5px; color:var(--muted);}
+.trend{color:var(--green); font-weight:600;}
+.x{color:var(--red);} .v{color:var(--green);}
+.two{display:flex; gap:16px; flex-wrap:wrap;}
+.two>div{flex:1; min-width:280px;}
+ul{padding-left:20px;}
+li{margin:4px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Словник модуля · Pie Charts</h1>
+<p class="sub">Довідка, а не текст для читання. Тримай відкритою під час перших 5–6 есе. Одне правило вище всього: <mark>діаграма без дат — present simple, нуль дієслів руху</mark>; дієслова змін повертаються лише з роками на діаграмах.</p>
+
+<h2>1 · Матриця: розмір долі × тип фрази</h2>
+<div class="card">
+<table>
+<tr><th>Розмір</th><th>Дієслова часток</th><th>Дроби</th><th>Прикметники</th></tr>
+<tr><td><b>Домінантна &gt;50%</b></td><td class="trend">accounted for over half of · constituted the majority of</td><td class="trend">well over half · the bulk of · more than one in two</td><td class="trend">dominant · overwhelming · the lion's share</td></tr>
+<tr><td><b>Велика 25–50%</b></td><td class="trend">made up · represented · comprised</td><td class="trend">just over a third · a quarter of · nearly half</td><td class="trend">the largest share · significant · substantial</td></tr>
+<tr><td><b>Помірна 10–25%</b></td><td class="trend">accounted for · constituted · formed</td><td class="trend">one in five · roughly a fifth · just under a quarter</td><td class="trend">considerable · notable · a sizeable minority</td></tr>
+<tr><td><b>Мала &lt;10%</b></td><td class="trend">made up · represented · amounted to</td><td class="trend">under one in ten · a small fraction · barely 3%</td><td class="trend">negligible · marginal · a mere 3%</td></tr>
+</table>
+<div class="warn"><b>«Games was big» = Band 5. «Games accounted for well over half of tablet time» = Band 7+.</b> Кожен другий відсоток перетворюй на дріб. Одне дієслово — максимум двічі на текст: міняй щоразу, як міняєш категорію.</div>
+</div>
+
+<h2>2 · Дієслова часток — граматика кожного</h2>
+<div class="card">
+<table>
+<tr><th>Дієслово</th><th>Патерн + приклад</th><th>Обережно</th></tr>
+<tr><td class="trend">account for</td><td>X accounts for 35% of Y.</td><td>Ніколи «account 35%» — for є частиною дієслова.</td></tr>
+<tr><td class="trend">constitute</td><td>X constitutes 30% of Y.</td><td>Формальне; без прийменника перед числом.</td></tr>
+<tr><td class="trend">make up</td><td>X makes up a quarter of Y.</td><td>Роздільне: «Oil makes up 42% of the total».</td></tr>
+<tr><td class="trend">comprise</td><td>Y comprises X, Y and Z — ціле першим.</td><td>«is comprised of» уникай у Task 1.</td></tr>
+<tr><td class="trend">represent</td><td>X represents a negligible 3%.</td><td>Узгодження: Social networking represents.</td></tr>
+<tr><td class="trend">amount to</td><td>X and Y together amount to 6%.</td><td>Найкраще для суми двох долень + together.</td></tr>
+</table>
+</div>
+
+<h2>3 · Дроби та апроксимація</h2>
+<div class="card">
+<table>
+<tr><th>Число</th><th>Дріб</th><th>У реченні</th></tr>
+<tr><td>50%</td><td>half · exactly half · one in two</td><td>Cars account for exactly half of all commutes.</td></tr>
+<tr><td>≈33%</td><td>a third · just over/under a third</td><td>Games made up just over a third of usage.</td></tr>
+<tr><td>=25%</td><td>a quarter · one in four</td><td>Housing rose from exactly a quarter of spending.</td></tr>
+<tr><td>≈66%</td><td>two thirds · nearly two thirds</td><td>Oil and gas constituted nearly two thirds of exports.</td></tr>
+<tr><td>=75%</td><td>three quarters · almost three quarters</td><td>The top two purposes consumed almost three quarters.</td></tr>
+<tr><td>=10%</td><td>one in ten · a tenth</td><td>Spending on other items fell to one in ten.</td></tr>
+<tr><td>3–5%</td><td>a small fraction · a mere 3% · barely 4%</td><td>Lighting represented a small fraction of the total.</td></tr>
+</table>
+<p class="small" style="margin-top:8px;"><b>Апроксиматори:</b> approximately · roughly · about · around + число; just over/under + кругле число; nearly/almost + дріб; well over/under — для акценту. Не вживай два апроксиматори в одному реченні.</p>
+</div>
+
+<h2>4 · Прикметники порівняння та majority / minority</h2>
+<div class="card">
+<table>
+<tr><th>Слово</th><th>Вживання</th></tr>
+<tr><td class="trend">dominant</td><td>Чіткий лідер; іменник: «its dominance was more pronounced on tablets».</td></tr>
+<tr><td class="trend">significant · substantial · considerable</td><td>Велика, але не лідер: «a significant 20% of smartphone time».</td></tr>
+<tr><td class="trend">modest · notable · sizeable</td><td>Середина: «a notable 18%»; «a sizeable minority» = 10–25%.</td></tr>
+<tr><td class="trend">negligible · marginal · minimal</td><td>Дрібні долі: «a negligible 3%» — одне слово замість «very, very small».</td></tr>
+<tr><td class="trend">mere</td><td>Підкреслює малість перед числом: «a mere 1% worked from home».</td></tr>
+</table>
+<div class="two" style="margin-top:10px;">
+<div><b>Родина majority:</b><br>the (vast/overwhelming) majority of + іменник<br><i>«The vast majority of energy — 72% — goes to heating.»</i></div>
+<div><b>Родина minority:</b><br>a (small/sizeable) minority of + іменник<br><i>«Only a small minority of exports — 4% — come from oil.»</i></div>
+</div>
+<div class="note">«Незначний» українською ≠ insignificant. Insignificant звучить як «неважливий». Для малих часток — negligible або marginal (про розмір, не про важливість).</div>
+</div>
+
+<h2>5 · Порівняння та множники</h2>
+<div class="card">
+<table>
+<tr><th>Патерн</th><th>Приклад</th></tr>
+<tr><td>X is twice/three times as high as Y</td><td>Gaming on tablets is nearly twice as high as on smartphones.</td></tr>
+<tr><td>X is twice the figure for Y</td><td>The over-60 share in Country A is six times the figure for Country C.</td></tr>
+<tr><td>X was nearly halved/doubled</td><td>Social networking's share was nearly halved on tablets, at 15%.</td></tr>
+<tr><td>half/double of the figure for X</td><td>News attracted half the figure for music and videos.</td></tr>
+<tr><td>considerably/slightly + larger/smaller</td><td>Utilities made up a considerably larger proportion on smartphones.</td></tr>
+<tr><td>broadly comparable / almost identical</td><td>News and other categories remained broadly comparable across devices.</td></tr>
+<tr><td>X, compared to/with Y</td><td>Games accounted for 35% on smartphones, compared to 57% on tablets.</td></tr>
+</table>
+</div>
+
+<h2>6 · Percent vs percentage points — датовані діаграми</h2>
+<div class="card">
+<table>
+<tr><th>Percentage points (розрив на діаграмі)</th><th>Відсоткова зміна (відносно старту)</th></tr>
+<tr><td>Oil fell by 17 percentage points (42 → 25)</td><td>Oil's share shrank by about 40% (17/42)</td></tr>
+<tr><td>Gas rose by 10 points, from 18% to 28%</td><td>Gas grew by over half relative to 1985</td></tr>
+<tr><td>Завжди правильно, екзаменатор цінує</td><td>Ефектно, але ризиковано — рахуй лише для круглих чисел</td></tr>
+</table>
+<div class="note">На іспиті кажи «percentage points» — це завжди правильно: «The share of food fell by 12 percentage points.» Відсоткову зміну («by 40%») використовуй лише коли ділиш на рівні числа.</div>
+</div>
+
+<h2>7 · Датовані діаграми: мова змін повертається</h2>
+<div class="card">
+<ul>
+<li><b>Великий ріст:</b> surged · soared · more than doubled · grew sevenfold</li>
+<li><b>Плавний ріст:</b> rose · climbed · grew · increased · edged up (малий)</li>
+<li><b>Велике падіння:</b> collapsed · plummeted · fell dramatically · shrank</li>
+<li><b>Плавне падіння:</b> fell · declined · dropped · dipped (малий)</li>
+<li><b>Зміна лідера:</b> overtook · became the largest category · lost its dominant position · was replaced by</li>
+<li><b>Стабільність:</b> remained stable · stayed broadly unchanged · held steady at</li>
+</ul>
+<p class="small" style="margin-top:8px;"><b>Три каркаси на 90% речень:</b> from X% to Y% · by X percentage points · X, compared to Y in [year].</p>
+</div>
+
+<h2>8 · Introduction та Overview — рамки</h2>
+<div class="card">
+<table>
+<tr><th>§1 · Перефраз</th><th>Приклад</th></tr>
+<tr><td>illustrate / compare / give a breakdown of…</td><td>The two pie charts compare how households distributed their spending across six categories.</td></tr>
+<tr><td>the proportion of + noun + devoted to / spent on</td><td>…the proportion of time devoted to different activities…</td></tr>
+<tr><td>broken down by / divided into + categories</td><td>…energy use in an average household, broken down by purpose.</td></tr>
+<tr><td>respectively</td><td>…on smartphones and tablets respectively. — доказ, що ти бачиш кілька діаграм.</td></tr>
+</table>
+<table style="margin-top:12px;">
+<tr><th>§2 · Overview (БЕЗ ЧИСЕЛ!)</th><th>Приклад</th></tr>
+<tr><td>Overall, X accounts for the largest share…</td><td>Overall, games constituted the largest share of time on both devices.</td></tr>
+<tr><td>…while/whereas + контраст</td><td>…while cooking and lighting represent only a negligible proportion.</td></tr>
+<tr><td>X depends heavily on / is dominated by Y</td><td>Economy A depends heavily on a single commodity.</td></tr>
+<tr><td>a far more/less + adj + profile</td><td>…whereas Economy B shows a far more balanced export profile.</td></tr>
+<tr><td>датовані: X overtook Y</td><td>Overall, housing overtook food to become the largest expense.</td></tr>
+</table>
+</div>
+
+<h2>9 · Шаблони body-речень</h2>
+<div class="card">
+<ul>
+<li><b>Відкриття Body 1:</b> Regarding the two leading categories,… / Turning to the largest shares,…</li>
+<li><b>Лідер + число:</b> [X] accounted for [fraction/figure] of [whole] at [%], making it the dominant [category].</li>
+<li><b>Та сама доля на двох діаграмах:</b> [X] represented [%] on [A], yet this figure was nearly [doubled/halved] on [B], at [%].</li>
+<li><b>Відкриття Body 2:</b> In contrast,… / At the other end of the scale,…</li>
+<li><b>Дрібні долі разом:</b> [X] and [Y] made up just [%] and [%] respectively, together amounting to [fraction].</li>
+<li><b>Схожість між діаграмами:</b> [X] remained broadly comparable across both charts, at around [%].</li>
+<li><b>Датовані:</b> [X] saw the strongest growth, rising from [%] to [%] to become the leading [category].</li>
+</ul>
+<p class="small" style="margin-top:8px;"><b>Grouping-шпаргалка:</b> лідери vs решта (одне коло) · за діаграмою/роком (коли контраст між колами) · risers vs fallers (датовані) · за категорією (коли контраст усередині категорій). Одна логіка на текст — ніколи «екскурсія по колу».</p>
+</div>
+
+<h2>10 · Пастки для україномовних</h2>
+<div class="card">
+<table>
+<tr><th>Пастка</th><th>✗ Неправильно</th><th>✓ Правильно</th></tr>
+<tr><td>«Найбільша частка»</td><td class="x">the most big share</td><td class="v">the largest share</td></tr>
+<tr><td>«У два рази»</td><td class="x">in 2 times bigger</td><td class="v">twice as high / nearly double</td></tr>
+<tr><td>Категорія «була великою»</td><td class="x">Games was the biggest</td><td class="v">Games accounted for the largest share</td></tr>
+<tr><td>Минулий час без дат</td><td class="x">games accounted for 35%</td><td class="v">games account for 35%</td></tr>
+<tr><td>«Відсотки» іменником</td><td class="x">35 percents</td><td class="v">35 percent / 35%</td></tr>
+<tr><td>account без for</td><td class="x">Games accounts 35%</td><td class="v">Games accounts for 35%</td></tr>
+<tr><td>«діаграма показує нам»</td><td class="x">the chart shows us</td><td class="v">the chart shows</td></tr>
+<tr><td>Узгодження</td><td class="x">Social networking represent 29%</td><td class="v">Social networking represents 29%</td></tr>
+</table>
+</div>
+
+<p class="small" style="margin-top:20px;">Порада: роздрукуй розділи 1, 3 і 6 і тримай перед очима під час перших есе. Через 5–6 завдань вони більше не знадобляться.</p>
+
+</div>
+</body>
+</html>

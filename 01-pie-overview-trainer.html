@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажер 1 · Навчись бачити — Pie Charts</title>
+<style>
+:root{
+  --bg:#F7F5EC; --card:#FFFFFF; --ink:#22271E; --muted:#6E7468; --line:#E4E1D2;
+  --green:#1E5631; --green-soft:#E9F2E4;
+  --lime:#84CC16; --lime-soft:#F2F9E0;
+  --yellow:#FDE047;
+  --orange:#E8890C; --orange-soft:#FCF1DE;
+  --red:#B3402E; --red-soft:#F8E9E5;
+  --purple:#7A5AA0; --purple-soft:#F1ECF7;
+  --blue:#2E5A88;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; font-size:16.5px; line-height:1.6; padding:24px 16px 60px;}
+.wrap{max-width:980px; margin:0 auto;}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif; color:var(--green); line-height:1.25;}
+h1{font-size:30px; margin-bottom:6px;}
+h2{font-size:22px; margin:36px 0 14px;}
+h3{font-size:18px; margin:20px 0 10px;}
+.sub{color:var(--muted); font-size:14.5px; margin-bottom:20px;}
+mark{background:var(--yellow); padding:0 3px; border-radius:2px;}
+.bc{font-size:13px; color:var(--muted); margin-bottom:14px;}
+.bc b{color:var(--green);}
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:20px; box-shadow:0 1px 3px rgba(30,60,30,.05);}
+.task-img{width:100%; border:1px solid var(--line); border-radius:10px; margin:12px 0; overflow:hidden;}
+.step-tag{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--orange); background:var(--orange-soft); border:1px solid var(--orange); border-radius:20px; padding:3px 12px; margin-bottom:10px;}
+.instr{background:var(--green-soft); border:1.5px solid var(--green); border-radius:12px; padding:14px 16px; margin:12px 0; font-size:15.5px;}
+.instr .lbl{display:block; font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--green); margin-bottom:6px;}
+.btn{display:inline-block; border:none; border-radius:10px; padding:11px 18px; font-size:14.5px; font-weight:600; cursor:pointer; margin:6px 6px 0 0; font-family:inherit;}
+.btn-primary{background:var(--green); color:#fff;}
+.btn-hint{background:transparent; border:1.5px solid var(--purple); color:var(--purple);}
+.btn-solution{background:transparent; border:1.5px solid var(--orange); color:var(--orange);}
+.btn-reset{background:transparent; border:1.5px solid var(--line); color:var(--muted);}
+.btn:hover{opacity:.85;}
+.opt{display:flex; gap:12px; align-items:flex-start; padding:14px 15px; border:1.5px solid var(--line); border-radius:10px; margin-bottom:9px; cursor:pointer; font-size:16.5px; line-height:1.5; background:var(--card);}
+.opt:hover{border-color:var(--green);}
+.opt input{margin-top:5px; accent-color:var(--green); flex-shrink:0; width:18px; height:18px;}
+.opt .why{display:none; font-size:14.5px; margin-top:6px; line-height:1.5;}
+.opt.ok{border-color:var(--green); background:var(--green-soft);}
+.opt.ok .why{display:block; color:var(--green);}
+.opt.bad{border-color:var(--red); background:var(--red-soft);}
+.opt.bad .why{display:block; color:var(--red);}
+textarea{width:100%; border:1.5px solid var(--line); border-radius:10px; padding:13px 15px; font-size:16px; font-family:inherit; background:var(--card); color:var(--ink); resize:vertical;}
+textarea:focus{outline:none; border-color:var(--green);}
+.hint-box{margin-top:14px; font-size:15px;}
+.hint-box .h{border-left:3px solid var(--purple); background:var(--purple-soft); padding:11px 15px; border-radius:0 8px 8px 0; margin-bottom:9px;}
+.hint-box .s{border-left:3px solid var(--orange); background:var(--orange-soft); padding:11px 15px; border-radius:0 8px 8px 0;}
+.wc{font-size:13px; color:var(--muted); margin-top:6px;}
+.rule{background:var(--lime-soft); border:1.5px solid var(--lime); border-radius:14px; padding:18px 20px; margin:28px 0;}
+.rule h3{margin-top:0;}
+.rule li{margin:7px 0 7px 18px;}
+.fb{margin-top:10px; font-size:15px; font-weight:600;}
+.fb.good{color:var(--green);} .fb.bad{color:var(--red);}
+.divider{border:none; border-top:2px dashed var(--line); margin:36px 0;}
+.small{font-size:13.5px; color:var(--muted);}
+@media (max-width:640px){
+  body{padding:16px 10px 44px; font-size:15.5px;}
+  h1{font-size:24px;} h2{font-size:19px;}
+  .card{padding:14px;}
+  .opt{font-size:15.5px; padding:12px;}
+  .btn{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="bc">Модуль 2 · Pie Charts → <b>Тренажер 1 з 4</b></div>
+<h1>Навчись бачити</h1>
+<p class="sub">Головна навичка модуля: знайти <mark>дві головні історії</mark> в колі за 60 секунд — домінантну долю та контраст розподілу.</p>
+
+<div class="card">
+  <span class="step-tag">Правило №1 пайчарта</span>
+  <p>Кругова діаграма <mark>не рухається</mark> — вона ділить ціле на частини. Немає дат на графіку → лише present simple і жодних дієслів руху (✗ «increased», ✗ «went up»). Дати є → повертається минулий час і мова змін. Дев'ять із десяти помилок українців у pie charts — це дієслова руху там, де треба дієслова часток.</p>
+</div>
+
+<div class="instr">
+  <span class="lbl">Як проходити цей тренажер</span>
+  <b>Частина А (завдання 1–3):</b> на кожній діаграмі познач рівно <b>два</b> твердження для overview і натисни «Перевірити».<br>
+  <b>Частина Б (завдання 4–5):</b> напиши дві історії сам, підказки — по одній. Розв'язання англійською (так писатимеш на іспиті), пояснення — українською.
+</div>
+
+<h2>Частина А · Обери дві історії (3 діаграми)</h2>
+
+<div class="card" id="t1">
+  <h3>Завдання 1 · Household energy use, by purpose (без дат)</h3>
+  <div class="task-img"><svg viewBox="0 0 340 400" width="100%" style="display:block;background:#fff;"><text x="170.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Energy use in an average household, by purpose</text><text x="170.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Average household</text><path d="M170.0,195 L170.0,100.0 A95,95 0 0 1 215.8,278.2 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="225.2" y="184.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">42%</text><path d="M170.0,195 L215.8,278.2 A95,95 0 0 1 76.7,212.8 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="145.7" y="250.6" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M170.0,195 L76.7,212.8 A95,95 0 0 1 100.7,130.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="115.3" y="183.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M170.0,195 L100.7,130.0 A95,95 0 0 1 135.0,106.7 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><polyline points="114.4,113.1 105.4,99.9" fill="none" stroke="#C94F7C" stroke-width="1.2"/><text x="105.4" y="103.9" font-size="12" font-weight="700" text-anchor="end" fill="#C94F7C" font-family="Segoe UI,sans-serif">7%</text><path d="M170.0,195 L135.0,106.7 A95,95 0 0 1 158.1,100.7 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="145.4,99.1 141.4,83.6" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="141.4" y="87.6" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">4%</text><path d="M170.0,195 L158.1,100.7 A95,95 0 0 1 170.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><polyline points="163.8,96.2 162.8,80.2" fill="none" stroke="#2F8F83" stroke-width="1.2"/><text x="162.8" y="84.2" font-size="12" font-weight="700" text-anchor="end" fill="#2F8F83" font-family="Segoe UI,sans-serif">2%</text><rect x="-288.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-269.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Heating &amp; cooling</text><rect x="-107.80000000000001" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="-88.80000000000001" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Water heating</text><rect x="42.0" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="61.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other appliances</text><rect x="214.6" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="233.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Refrigeration</text><rect x="364.4" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="383.4" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Lighting</text><rect x="476.2" y="368" width="13" height="13" rx="3" fill="#2F8F83"/><text x="495.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Cooking</text></svg></div>
+  <div class="opts" data-task="t1"></div>
+  <button class="btn btn-primary" onclick="check('t1')">Перевірити</button>
+  <button class="btn btn-reset" onclick="resetMCQ('t1')">Спробувати ще</button>
+  <div class="fb" id="fb-t1"></div>
+</div>
+
+<div class="card" id="t2">
+  <h3>Завдання 2 · Age structure, three countries (без дат)</h3>
+  <div class="task-img"><svg viewBox="0 0 870 400" width="100%" style="display:block;background:#fff;"><text x="435.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Age structure of the population, three countries</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country A</text><path d="M165.0,195 L165.0,100.0 A95,95 0 0 1 230.0,125.7 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="186.0" y="146.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M165.0,195 L230.0,125.7 A95,95 0 1 1 74.6,224.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="195.5" y="247.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">58%</text><path d="M165.0,195 L74.6,224.4 A95,95 0 0 1 165.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="118.9" y="165.5" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country B</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 528.3,177.2 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="471.3" y="155.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">22%</text><path d="M435.0,195 L528.3,177.2 A95,95 0 1 1 361.8,134.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="420.8" y="254.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">64%</text><path d="M435.0,195 L361.8,134.4 A95,95 0 0 1 435.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="410.7" y="147.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">14%</text><text x="705.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Country C</text><path d="M705.0,195 L705.0,100.0 A95,95 0 0 1 740.0,283.3 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="761.0" y="188.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">44%</text><path d="M705.0,195 L740.0,283.3 A95,95 0 1 1 675.6,104.6 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="651.4" y="218.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">51%</text><path d="M705.0,195 L675.6,104.6 A95,95 0 0 1 705.0,100.0 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><polyline points="689.5,97.2 687.0,81.4" fill="none" stroke="#4A7C59" stroke-width="1.2"/><text x="687.0" y="85.4" font-size="12" font-weight="700" text-anchor="end" fill="#4A7C59" font-family="Segoe UI,sans-serif">5%</text><rect x="234.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="253.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">0–14 years</text><rect x="361.0" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="380.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">15–59 years</text><rect x="495.6" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="514.6" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">60+ years</text></svg></div>
+  <div class="opts" data-task="t2"></div>
+  <button class="btn btn-primary" onclick="check('t2')">Перевірити</button>
+  <button class="btn btn-reset" onclick="resetMCQ('t2')">Спробувати ще</button>
+  <div class="fb" id="fb-t2"></div>
+</div>
+
+<div class="card" id="t3">
+  <h3>Завдання 3 · Export composition, two economies (без дат)</h3>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Composition of exports, two economies</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Economy A</text><path d="M165.0,195 L165.0,100.0 A95,95 0 1 1 91.8,255.6 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="216.6" y="223.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">64%</text><path d="M165.0,195 L91.8,255.6 A95,95 0 0 1 70.0,195.0 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="111.4" y="218.3" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">11%</text><path d="M165.0,195 L70.0,195.0 A95,95 0 0 1 84.8,144.1 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="110.3" y="183.1" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">9%</text><path d="M165.0,195 L84.8,144.1 A95,95 0 0 1 95.7,130.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><polyline points="86.8,134.3 74.1,124.5" fill="none" stroke="#C94F7C" stroke-width="1.2"/><text x="74.1" y="128.5" font-size="12" font-weight="700" text-anchor="end" fill="#C94F7C" font-family="Segoe UI,sans-serif">3%</text><path d="M165.0,195 L95.7,130.0 A95,95 0 0 1 104.4,121.8 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="97.2,122.8 86.3,111.2" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="86.3" y="115.2" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">2%</text><path d="M165.0,195 L104.4,121.8 A95,95 0 0 1 165.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><text x="145.7" y="145.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">11%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">Economy B</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 458.6,103.0 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><polyline points="447.4,96.8 449.4,80.9" fill="none" stroke="#2E5A88" stroke-width="1.2"/><text x="449.4" y="84.9" font-size="12" font-weight="700" text-anchor="start" fill="#2E5A88" font-family="Segoe UI,sans-serif">4%</text><path d="M435.0,195 L458.6,103.0 A95,95 0 0 1 508.2,134.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="465.5" y="150.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><path d="M435.0,195 L508.2,134.4 A95,95 0 0 1 521.0,235.4 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="491.6" y="191.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">18%</text><path d="M435.0,195 L521.0,235.4 A95,95 0 0 1 370.0,264.3 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="445.7" y="255.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M435.0,195 L370.0,264.3 A95,95 0 0 1 370.0,125.7 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><text x="378.0" y="199.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">26%</text><path d="M435.0,195 L370.0,125.7 A95,95 0 0 1 435.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><text x="414.0" y="146.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><rect x="-90.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-71.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Oil &amp; gas</text><rect x="29.39999999999999" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="48.39999999999999" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Metals</text><rect x="125.99999999999999" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="145.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Agriculture</text><rect x="260.59999999999997" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="279.59999999999997" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Machinery</text><rect x="379.99999999999994" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="398.99999999999994" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Electronics</text><rect x="514.5999999999999" y="368" width="13" height="13" rx="3" fill="#2F8F83"/><text x="533.5999999999999" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other goods</text></svg></div>
+  <div class="opts" data-task="t3"></div>
+  <button class="btn btn-primary" onclick="check('t3')">Перевірити</button>
+  <button class="btn btn-reset" onclick="resetMCQ('t3')">Спробувати ще</button>
+  <div class="fb" id="fb-t3"></div>
+</div>
+
+<hr class="divider">
+
+<h2>Частина Б · Своїми словами (2 діаграми з роками)</h2>
+<p class="small">Тут діаграми мають дати — отже, минулий час і мова змін легальні. Саме це треба зрозуміти до кінця.</p>
+
+<div class="card">
+  <h3>Завдання 4 · Commuting to work, 2005 vs 2025</h3>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">How commuters travelled to work</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">2005</text><path d="M165.0,195 L165.0,100.0 A95,95 0 1 1 135.6,285.4 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="221.3" y="207.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">55%</text><path d="M165.0,195 L135.6,285.4 A95,95 0 0 1 79.0,154.6 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="112.7" y="221.6" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">27%</text><path d="M165.0,195 L79.0,154.6 A95,95 0 0 1 109.2,118.1 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="121.1" y="162.7" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">8%</text><path d="M165.0,195 L109.2,118.1 A95,95 0 0 1 159.0,100.2 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="145.7" y="145.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">9%</text><path d="M165.0,195 L159.0,100.2 A95,95 0 0 1 165.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="161.9,96.0 161.4,80.1" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="161.4" y="84.1" font-size="12" font-weight="700" text-anchor="middle" fill="#D9A81C" font-family="Segoe UI,sans-serif">1%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">2025</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 500.0,264.3 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="488.0" y="178.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">38%</text><path d="M435.0,195 L500.0,264.3 A95,95 0 0 1 349.0,235.4 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="424.3" y="255.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">30%</text><path d="M435.0,195 L349.0,235.4 A95,95 0 0 1 351.8,149.2 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="378.0" y="197.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M435.0,195 L351.8,149.2 A95,95 0 0 1 394.6,109.0 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="396.0" y="157.4" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><path d="M435.0,195 L394.6,109.0 A95,95 0 0 1 435.0,100.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="413.4,98.4 409.9,82.8" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="409.9" y="86.8" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">7%</text><rect x="-31.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="-12.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Car</text><rect x="42.8" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="61.8" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Public transport</text><rect x="215.39999999999998" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="234.39999999999998" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Cycling</text><rect x="319.59999999999997" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="338.59999999999997" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Walking</text><rect x="423.79999999999995" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="442.79999999999995" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Worked from home</text></svg></div>
+  <div class="instr"><span class="lbl">Інструкція до завдання</span>Подивись 60 секунд і напиши <b>дві історії</b> (можна українською). Пам'ятай: роки на діаграмах означають, що тренди тут — легально.</div>
+  <textarea id="ta4" rows="3" placeholder="Історія 1: ... Історія 2: ..."></textarea>
+  <div class="wc" id="wc4">0 слів</div>
+  <div>
+    <button class="btn btn-hint" onclick="showHint('h4',1)">Підказка 1</button>
+    <button class="btn btn-hint" onclick="showHint('h4',2)">Підказка 2</button>
+    <button class="btn btn-solution" onclick="showHint('h4',3)">Показати розв'язання</button>
+    <button class="btn btn-reset" onclick="resetLadder('h4','ta4','wc4')">Очистити</button>
+  </div>
+  <div class="hint-box" id="h4"></div>
+</div>
+
+<div class="card">
+  <h3>Завдання 5 · Electricity generation, 1985 vs 2003</h3>
+  <div class="task-img"><svg viewBox="0 0 600 400" width="100%" style="display:block;background:#fff;"><text x="300.0" y="24" font-size="15" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Georgia,serif">Electricity generation by source</text><text x="165.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">1985</text><path d="M165.0,195 L165.0,100.0 A95,95 0 0 1 210.8,278.2 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="220.2" y="184.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">42%</text><path d="M165.0,195 L210.8,278.2 A95,95 0 0 1 100.0,264.3 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="157.9" y="255.6" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">20%</text><path d="M165.0,195 L100.0,264.3 A95,95 0 0 1 74.6,165.6 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="109.8" y="213.2" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">18%</text><path d="M165.0,195 L74.6,165.6 A95,95 0 0 1 100.0,125.7 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="116.9" y="168.5" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">8%</text><path d="M165.0,195 L100.0,125.7 A95,95 0 0 1 124.6,109.0 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><polyline points="109.4,113.1 100.4,99.9" fill="none" stroke="#D9A81C" stroke-width="1.2"/><text x="100.4" y="103.9" font-size="12" font-weight="700" text-anchor="end" fill="#D9A81C" font-family="Segoe UI,sans-serif">5%</text><path d="M165.0,195 L124.6,109.0 A95,95 0 0 1 165.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><polyline points="143.4,98.4 139.9,82.8" fill="none" stroke="#2F8F83" stroke-width="1.2"/><text x="139.9" y="86.8" font-size="12" font-weight="700" text-anchor="end" fill="#2F8F83" font-family="Segoe UI,sans-serif">7%</text><text x="435.0" y="58" font-size="13.5" font-weight="600" text-anchor="middle" fill="#22271E" font-family="Segoe UI,sans-serif">2003</text><path d="M435.0,195 L435.0,100.0 A95,95 0 0 1 530.0,195.0 Z" fill="#2E5A88" stroke="#fff" stroke-width="2"/><text x="475.3" y="158.7" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">25%</text><path d="M435.0,195 L530.0,195.0 A95,95 0 0 1 504.3,260.0 Z" fill="#E8890C" stroke="#fff" stroke-width="2"/><text x="488.0" y="220.0" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">12%</text><path d="M435.0,195 L504.3,260.0 A95,95 0 0 1 358.1,250.8 Z" fill="#4A7C59" stroke="#fff" stroke-width="2"/><text x="431.4" y="255.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">28%</text><path d="M435.0,195 L358.1,250.8 A95,95 0 0 1 344.6,165.6 Z" fill="#C94F7C" stroke="#fff" stroke-width="2"/><text x="378.7" y="207.9" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">15%</text><path d="M435.0,195 L344.6,165.6 A95,95 0 0 1 379.2,118.1 Z" fill="#D9A81C" stroke="#fff" stroke-width="2"/><text x="388.9" y="165.5" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><path d="M435.0,195 L379.2,118.1 A95,95 0 0 1 435.0,100.0 Z" fill="#2F8F83" stroke="#fff" stroke-width="2"/><text x="417.4" y="144.8" font-size="13" font-weight="700" text-anchor="middle" fill="#fff" font-family="Segoe UI,sans-serif">10%</text><rect x="10.0" y="368" width="13" height="13" rx="3" fill="#2E5A88"/><text x="29.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Oil</text><rect x="83.8" y="368" width="13" height="13" rx="3" fill="#E8890C"/><text x="102.8" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Coal</text><rect x="165.2" y="368" width="13" height="13" rx="3" fill="#4A7C59"/><text x="184.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Gas</text><rect x="239.0" y="368" width="13" height="13" rx="3" fill="#C94F7C"/><text x="258.0" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Nuclear</text><rect x="343.2" y="368" width="13" height="13" rx="3" fill="#D9A81C"/><text x="362.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Renewables</text><rect x="470.2" y="368" width="13" height="13" rx="3" fill="#2F8F83"/><text x="489.2" y="379" font-size="12.5" fill="#4A4F44" font-family="Segoe UI,sans-serif">Other</text></svg></div>
+  <div class="instr"><span class="lbl">Інструкція до завдання</span>Та сама вправа, нові дані. Спершу спробуй без підказок.</div>
+  <textarea id="ta5" rows="3" placeholder="Історія 1: ... Історія 2: ..."></textarea>
+  <div class="wc" id="wc5">0 слів</div>
+  <div>
+    <button class="btn btn-hint" onclick="showHint('h5',1)">Підказка 1</button>
+    <button class="btn btn-solution" onclick="showHint('h5',2)">Показати розв'язання</button>
+    <button class="btn btn-reset" onclick="resetLadder('h5','ta5','wc5')">Очистити</button>
+  </div>
+  <div class="hint-box" id="h5"></div>
+</div>
+
+<div class="rule">
+  <h3>Підсумок тренажера · що ти тепер вмієш</h3>
+  <ul>
+    <li>За 60 секунд знаходити в колі <b>дві історії</b>: домінантна доля + контраст розподілу (між долями або між діаграмами).</li>
+    <li>Визначати режим мови: <mark>немає дат → present simple, нуль трендів</mark>; є дати → past simple + мова змін.</li>
+    <li>Розпізнавати «не-overview»: цифри, дрібниці, причини.</li>
+  </ul>
+  <p class="small" style="margin-top:10px;">Навіщо це далі: ці історії стануть overview, а їхній тип контрасту вирішить, як групувати body у Тренажері 2.</p>
+</div>
+
+</div>
+
+<script>
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+const TASKS = {
+  t1: { opts: shuffle([
+    { t:"Refrigeration accounts for 7% of household energy.", ok:false, why:"Цифра з однієї долі — деталь для body, не overview." },
+    { t:"Heating and cooling is by far the largest share, and the two leading purposes together make up nearly three quarters of all consumption.", ok:true,  why:"Історія №1: домінанта + найсильніший агрегат (42+30) у дробі — жодної цифри." },
+    { t:"Heating dominates because winters are cold.", ok:false, why:"Причина — не дані діаграми. Міні і думки заборонені." },
+    { t:"Cooking and lighting together represent only a negligible proportion.", ok:true,  why:"Історія №2: нижній полюс розподілу — другий кінець контрасту." },
+    { t:"Water heating makes up 30%.", ok:false, why:"Перелік відсотків = переказ. Overview — про структуру, не про числа." }
+  ])},
+  t2: { opts: shuffle([
+    { t:"The working-age population forms the majority in all three countries.", ok:true,  why:"Історія №1: одне речення для всіх дев'яти долей — вибір, а не переказ." },
+    { t:"Country C is by far the youngest, while Country A has the oldest population.", ok:true,  why:"Історія №2: контраст крайнощів між діаграмами." },
+    { t:"44% of Country C's population are children under 15.", ok:false, why:"Цифра однієї діаграми — для body." },
+    { t:"Country B has the highest share of working-age people because of migration.", ok:false, why:"Причина (migration) не показана на діаграмах." },
+    { t:"The 60+ share in Country A is 30%.", ok:false, why:"Перелік чисел — це переказ." }
+  ])},
+  t3: { opts: shuffle([
+    { t:"Oil and gas accounts for 64% of Economy A's exports.", ok:false, why:"Цифра однієї діаграми — деталь для body." },
+    { t:"Economy A depends heavily on a single commodity, whereas Economy B shows a far more balanced export profile.", ok:true,  why:"Історія №1: контраст структур двох економік — ось що видно «іздалека»." },
+    { t:"Machinery and electronics together make up well over half of Economy B's exports.", ok:true,  why:"Історія №2: агрегат двох долей (30+26) у дробі — без жодної цифри." },
+    { t:"Economy A exports oil because it has no other industries.", ok:false, why:"Причина — не дані діаграми." },
+    { t:"Metals represent 10% of Economy B's exports.", ok:false, why:"Дрібниця — це не «історія»." }
+  ])}
+};
+
+const HINTS = {
+  h4: [
+    "<div class='h'><b>Підказка 1.</b> Дві речі: хто домінує в кожному році — і що змінилося найдраматичніше між 2005 і 2025.</div>",
+    "<div class='h'><b>Підказка 2.</b> Автомобіль лишається лідером, але його частка впала з 55% до 38%. Найсильніші зміни — велосипед (8→15, майже вдвічі) і робота з дому (1→7, у сім разів).</div>",
+    "<div class='s'><b>Розв'язання (пиши так само англійською):</b><br>«Overall, the car remained the most common mode of transport, but its dominance weakened considerably, while cycling and working from home emerged as significant trends by 2025.»<br><span class='small'><b>Українською:</b> лідер + головна зміна (дві нові тенденції). Зверни увагу: remained weakened emerged — дієслова зміни, бо роки є; жодної цифри.</span></div>"
+  ],
+  h5: [
+    "<div class='h'><b>Підказка 1.</b> Хто був лідером у 1985 — і хто став ним у 2003? Саме цей «перекид» і є історія.</div>",
+    "<div class='s'><b>Розв'язання (пиши так само англійською):</b><br>«Overall, the country's energy mix diversified considerably over the period: oil lost its dominant position, while gas and nuclear power grew substantially.»<br><span class='small'><b>Українською:</b> структурна зміна (diversified) + два полюси: хто втратив лідерство, хто виріс. Минулий час, бо є роки.</span></div>"
+  ]
+};
+
+function renderOpts(id){
+  const box = document.querySelector('[data-task="'+id+'"]');
+  box.innerHTML = TASKS[id].opts.map((o,i)=>
+    '<label class="opt" id="l-'+id+'-'+i+'"><input type="checkbox" id="c-'+id+'-'+i+'"><span>'+o.t+'<div class="why" id="w-'+id+'-'+i+'"></div></span></label>'
+  ).join('');
+}
+
+function check(id){
+  const t = TASKS[id]; let picked = 0, correctPicked = 0;
+  t.opts.forEach((o,i)=>{
+    const cb = document.getElementById('c-'+id+'-'+i), lab = document.getElementById('l-'+id+'-'+i), why = document.getElementById('w-'+id+'-'+i);
+    const isPicked = cb.checked;
+    if(isPicked){ picked++; if(o.ok) correctPicked++; }
+    const good = isPicked === o.ok;
+    lab.classList.remove('ok','bad'); why.innerHTML = '';
+    if(isPicked || !o.ok){
+      lab.classList.add(good ? 'ok' : 'bad');
+      why.innerHTML = (o.ok?'✓ ':'✗ ')+o.why;
+    }
+  });
+  const fb = document.getElementById('fb-'+id);
+  if(picked===2 && correctPicked===2){ fb.textContent='✓ Обидва вірно! Це і є очі екзаменатора.'; fb.className='fb good'; }
+  else if(picked===2){ fb.textContent='Два обрано, але є помилка — читай червоні пояснення.'; fb.className='fb bad'; }
+  else { fb.textContent='Потрібно позначити рівно два твердження (обрано '+picked+').'; fb.className='fb bad'; }
+}
+
+function resetMCQ(id){
+  TASKS[id].opts.forEach((o,i)=>{
+    document.getElementById('c-'+id+'-'+i).checked = false;
+    document.getElementById('l-'+id+'-'+i).classList.remove('ok','bad');
+    document.getElementById('w-'+id+'-'+i).innerHTML = '';
+  });
+  const fb = document.getElementById('fb-'+id);
+  fb.textContent = ''; fb.className='fb';
+}
+
+function showHint(boxId, level){
+  const box = document.getElementById(boxId);
+  const arr = HINTS[boxId];
+  const html = arr[Math.min(level, arr.length)-1];
+  if(!box.innerHTML.includes(html)){ box.innerHTML += html; }
+}
+
+function resetLadder(boxId, taId, wcId){
+  document.getElementById(boxId).innerHTML = '';
+  const ta = document.getElementById(taId);
+  ta.value = ''; ta.readOnly = false;
+  document.getElementById(wcId).textContent = '0 слів';
+}
+
+Object.keys(TASKS).forEach(renderOpts);
+
+['ta4','ta5'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', function(){
+    const n = this.value.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById('wc'+id.slice(2)).textContent = n + ' слів';
+  });
+});
+</script>
+</body>
+</html>
